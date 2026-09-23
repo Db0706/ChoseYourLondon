@@ -164,17 +164,17 @@ export async function renderCard(canvas: HTMLCanvasElement, o: CardOptions) {
 
   // footer: big avatar + name
   const R = 150, ax = 130 + R, fy = H - 100 - R;
-  if (photo) { ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 60; ctx.shadowOffsetY = 16; ctx.beginPath(); ctx.arc(ax, fy, R + 12, 0, Math.PI * 2); ctx.fillStyle = col; ctx.fill(); ctx.restore(); }
+  // soft drop shadow only, no coloured ring
+  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 50; ctx.shadowOffsetY = 14;
+  ctx.beginPath(); ctx.arc(ax, fy, R, 0, Math.PI * 2); ctx.fillStyle = 'rgba(10,10,12,.55)'; ctx.fill(); ctx.restore();
   ctx.save(); ctx.beginPath(); ctx.arc(ax, fy, R, 0, Math.PI * 2); ctx.closePath();
   if (avatar) { ctx.clip(); cover(ctx, avatar, ax - R, fy - R, 2 * R, 2 * R); }
   else {
-    ctx.fillStyle = photo ? col : ink; ctx.fill();
-    ctx.fillStyle = photo ? inkOn(col) : col; spaced(ctx, 0);
+    ctx.fillStyle = fg; spaced(ctx, 0);
     ctx.font = `170px ${serif}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(initials(o.name), ax, fy + 12);
   }
   ctx.restore();
-  ctx.beginPath(); ctx.arc(ax, fy, R + 12, 0, Math.PI * 2); ctx.strokeStyle = photo ? col : ink; ctx.lineWidth = 10; ctx.stroke();
 
   const tx = ax + R + 64;
   ctx.fillStyle = fg; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; spaced(ctx, 0);
