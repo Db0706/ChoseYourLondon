@@ -82,11 +82,6 @@ export default function Night() {
       </section>
 
       <section id="studio" className={s.studio}>
-        <div className={s.studioHead}>
-          <h2 className={s.h2}>The card <em>studio</em></h2>
-          <p className={s.studioIntro}>Two steps. It all happens in your browser, and nothing gets posted until you post it.</p>
-        </div>
-
         <div className={s.studioRow}>
           <div className={s.controls}>
             <div className={s.step}>
