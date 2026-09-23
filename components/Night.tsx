@@ -43,7 +43,7 @@ export default function Night() {
   return (
     <div id="top" className={s.root} data-theme="night">
       <header className={s.header}>
-        <a href="#top" aria-label="Choose Your London" className={s.logoSmall}><img src="/assets/cyl-logo.png" alt="Choose Your London" className={`${s.logoImg} ${s.logoWhite}`} /></a>
+        <a href="#top" aria-label="Superteam UK" className={s.logoSmall}><img src="/assets/stuk-logo-white.png" alt="Superteam UK" className={s.stukLogo} /></a>
         <div className={s.kicker}>Solana Breakpoint · Olympia London · 15–17 Nov 2026</div>
         <nav className={s.nav}>
           <button type="button" onClick={openDrawer} className={s.episodesBtn}>Episodes<span className={s.liveDot} /></button>
@@ -52,7 +52,7 @@ export default function Night() {
       </header>
 
       <section className={s.hero}>
-        <img src="/assets/royal-exchange.jpg" alt="Choose Your London over the Royal Exchange at dusk" className={s.heroImg} />
+        <img src="/landmarks/big-ben.jpg" alt="Choose Your London over Big Ben and the Houses of Parliament" className={s.heroImg} />
         <div className={s.heroShade} />
         <div className={s.heroBottom}>
           <a href="#intro" className={s.scrollCue}><span className={s.red}>A Superteam UK campaign</span><span>Scroll to make your card ↓</span></a>
@@ -67,7 +67,7 @@ export default function Night() {
       <section id="intro" className={s.intro}>
         <h1 className={s.h1}>Everyone’s coming to London. <em>Pick your corner of it.</em></h1>
         <div className={s.introSide}>
-          <p className={s.introText}>Choose a landmark, add your community, download the card. Then post it and tag the friend who still hasn’t booked.</p>
+          <p className={s.introText}>London picks your stop, you add your community, then download the card. Then post it and tag the friend who still hasn’t booked.</p>
           <div className={s.btnRow}>
             <a href="#studio" className={s.primary}>Make your card</a>
             <button type="button" onClick={openDrawer} className={s.secondary}>Watch the series</button>

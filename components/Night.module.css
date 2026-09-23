@@ -2,9 +2,9 @@
 
 /* Header */
 .header { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px clamp(16px, 3vw, 40px); background: linear-gradient(180deg, rgba(10, 10, 12, .75), rgba(10, 10, 12, 0)); }
-.logoSmall { display: block; flex: none; width: 98px; aspect-ratio: 2365/965; overflow: hidden; }
+.logoSmall { display: block; flex: none; width: 128px; }
+.stukLogo { display: block; width: 100%; height: auto; }
 .logoImg { display: block; width: 108.2%; margin: -9.7% 0 0 -4.1%; }
-.logoWhite { filter: brightness(0) invert(1); }
 .kicker { flex: 0 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font: 500 11px/1 var(--mono), monospace; letter-spacing: .16em; text-transform: uppercase; color: #C9C4BB; }
 .nav { display: flex; align-items: center; gap: 10px; flex: none; }
 .episodesBtn { display: flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 999px; border: 1px solid rgba(243, 239, 231, .3); background: rgba(10, 10, 12, .35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #F3EFE7; font: 600 14px var(--sans), sans-serif; cursor: pointer; }
@@ -12,6 +12,13 @@
 .liveDot { width: 7px; height: 7px; border-radius: 50%; background: #F2140F; box-shadow: 0 0 10px #F2140F; }
 .navCta { padding: 12px 20px; border-radius: 999px; background: #F2140F; color: #fff; font: 600 14px var(--sans), sans-serif; }
 .navCta:hover { background: #F3EFE7; color: #0A0A0C; }
+@media (max-width: 480px) {
+  .header { gap: 10px; }
+  .kicker { display: none; }
+  .logoSmall { width: 100px; }
+  .episodesBtn { padding: 10px 13px; font-size: 13px; }
+  .navCta { padding: 11px 15px; font-size: 13px; }
+}
 
 /* Hero */
 .hero { position: relative; height: 100vh; min-height: 660px; overflow: hidden; background: #0A0A0C; }
@@ -21,8 +28,8 @@
 /* Portrait screens: show the whole photo so the baked-in wordmark isn't cropped */
 @media (max-aspect-ratio: 1/1) {
   .hero { height: auto; min-height: 0; padding-top: 76px; }
-  .heroImg { position: relative; display: block; left: 0; top: 0; width: 100%; height: auto; aspect-ratio: 1280/853; }
-  .heroShade { top: 76px; bottom: auto; height: calc(100vw * 853 / 1280); background: linear-gradient(180deg, rgba(10, 10, 12, 0) 70%, #0A0A0C 100%); }
+  .heroImg { position: relative; display: block; left: 0; top: 0; width: 100%; height: auto; aspect-ratio: 1672/941; }
+  .heroShade { top: 76px; bottom: auto; height: calc(100vw * 941 / 1672); background: linear-gradient(180deg, rgba(10, 10, 12, 0) 70%, #0A0A0C 100%); }
   .heroBottom { position: relative; padding-top: 28px; }
 }
 .scrollCue { display: flex; flex-direction: column; gap: 10px; font: 500 11px var(--mono), monospace; letter-spacing: .18em; text-transform: uppercase; color: #D6D1C8; }
