@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { LANDMARKS, type EpisodeInfo, countdown, episodeInfo, fmtDate, pad } from '@/lib/cyl-card';
 import { LUMA_URL, WATCH_URL } from '@/lib/config';
 import { useCardStudio } from '@/lib/useCardStudio';
+import LandmarkPicker from './LandmarkPicker';
 import s from './Night.module.css';
 
 export default function Night() {
@@ -97,14 +98,7 @@ export default function Night() {
 
             <div className={s.stepTight}>
               <div className={s.stepLabelSplit}><span className={s.stepLabelLeft}><span className={s.red}>02</span>Your landmark</span><span>{LANDMARKS.length} stops</span></div>
-              <label className={s.selectWrap}>
-                <span className={s.fieldLabel}>Pick a stop</span>
-                <select value={st.landmarkId} onChange={e => st.pickLandmark(e.target.value)} className={s.select}>
-                  {LANDMARKS.map((lm, i) => (
-                    <option key={lm.id} value={lm.id}>{pad(i + 1)} · {lm.name} — {lm.area}{lm.photo ? ' (photo)' : ''}</option>
-                  ))}
-                </select>
-              </label>
+              <LandmarkPicker value={st.landmarkId} onChange={st.pickLandmark} />
               <div className={s.photoRow}>
                 <label className={s.photoUpload}>Use your own landmark photo<input type="file" accept="image/*" onChange={st.onPhotoFile} className={s.hidden} /></label>
                 <span>Otherwise it prints as a red card.</span>

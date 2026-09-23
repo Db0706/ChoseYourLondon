@@ -1,0 +1,22 @@
+.root { position: relative; }
+
+.trigger { width: 100%; display: flex; align-items: baseline; gap: 14px; padding: 12px 2px 14px; background: none; border: 0; border-bottom: 1px solid rgba(243, 239, 231, .22); color: #F3EFE7; text-align: left; cursor: pointer; transition: border-color .25s; }
+.trigger:hover, .trigger:focus-visible, .trigger[aria-expanded="true"] { border-bottom-color: #F2140F; outline: none; }
+
+.num { flex: none; font: 500 11px var(--mono), monospace; color: #6f6a63; }
+.text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.name { font: italic 400 34px/1 var(--serif), serif; color: #F2140F; }
+.area { font: 500 10px var(--mono), monospace; letter-spacing: .12em; text-transform: uppercase; color: #8A857D; }
+.tag { margin-left: 6px; }
+
+.chevron { flex: none; align-self: center; width: 11px; height: 11px; margin-right: 6px; border-right: 2px solid #F3EFE7; border-bottom: 2px solid #F3EFE7; transform: translateY(-3px) rotate(45deg); transition: transform .25s; }
+.chevron[data-open="true"] { transform: translateY(3px) rotate(225deg); }
+
+.list { position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 20; margin: 0; padding: 6px; list-style: none; max-height: 380px; overflow-y: auto; background: #111114; border: 1px solid rgba(243, 239, 231, .1); border-radius: 12px; box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .8); opacity: 0; transform: translateY(-6px); pointer-events: none; transition: opacity .2s, transform .2s; scrollbar-width: thin; scrollbar-color: rgba(243, 239, 231, .2) transparent; }
+.list[data-open="true"] { opacity: 1; transform: none; pointer-events: auto; }
+
+.option { display: flex; align-items: baseline; gap: 14px; padding: 12px 12px; border-radius: 8px; color: #F3EFE7; cursor: pointer; transition: background .15s, padding .2s; }
+.option[data-active="true"] { background: rgba(243, 239, 231, .06); padding-left: 18px; }
+.option[data-selected="true"] .optName { color: #F2140F; font-style: italic; }
+.optName { font: 400 24px/1 var(--serif), serif; }
+.check { flex: none; align-self: center; font-size: 8px; color: #F2140F; }
