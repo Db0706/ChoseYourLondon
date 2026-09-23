@@ -10,7 +10,7 @@ import BeanRain from './BeanRain';
 import s from './Night.module.css';
 
 export default function Night() {
-  const st = useCardStudio({ landmarkId: 'royal-exchange' });
+  const st = useCardStudio();
   const [drawer, setDrawer] = useState(false);
   // Name flicker while shuffling, like a departure board.
   const [rolling, setRolling] = useState<string | null>(null);
@@ -65,7 +65,7 @@ export default function Night() {
           <button type="button" onClick={openDrawer} className={s.heroChip}>
             <span className={s.chipTitle}><span className={s.dot} />{heroChipTitle}</span>
             <span className={s.chipCount}>{count}</span>
-            <span className={s.chipSub}>Solana Ecosystem Call, then X</span>
+            <span className={s.chipSub}>Every Thursday · 4PM BST on X</span>
           </button>
         </div>
       </section>
@@ -85,10 +85,9 @@ export default function Night() {
         <div className={s.studioRow}>
           <div className={s.controls}>
             <div className={s.step}>
-              <div className={s.stepLabel}><span className={s.red}>01</span>Who’s choosing</div>
               <div className={s.handleRow}>
                 <label className={s.field}>
-                  <span className={s.fieldLabel}>X handle</span>
+                  <span className={s.fieldLabel}>Your X handle</span>
                   <span className={s.handleBox}>
                     <span className={s.at}>@</span>
                     <input value={st.handle} onChange={st.onHandle} onKeyDown={st.onHandleKey} placeholder="SuperteamUK" spellCheck={false} className={s.handleInput} />
@@ -97,8 +96,12 @@ export default function Night() {
                 <button type="button" onClick={st.pull} className={s.ghostBtn}>Pull from X</button>
               </div>
               <label className={s.nameField}>
-                <span className={s.fieldLabel}>Name on the card</span>
-                <input value={st.name} onChange={st.onName} placeholder="Superteam UK" className={s.nameInput} />
+                <span className={s.fieldLabel}>Name</span>
+                <input value={st.name} onChange={st.onName} placeholder="Your name" className={s.nameInput} />
+              </label>
+              <label className={s.nameField}>
+                <span className={s.fieldLabel}>Company/community or title</span>
+                <input value={st.company} onChange={st.onCompany} placeholder="Superteam UK" className={s.nameInput} />
               </label>
               <div className={s.uploads}>
                 <label className={s.upload}>Upload logo or photo<input type="file" accept="image/*" onChange={st.onAvatarFile} className={s.hidden} /></label>
@@ -107,15 +110,16 @@ export default function Night() {
             </div>
 
             <div className={s.stepTight}>
-              <div className={s.stepLabelSplit}><span className={s.stepLabelLeft}><span className={s.red}>02</span>Your stop</span><span>{LANDMARKS.length} stops</span></div>
               <div className={s.stopRow}>
-                <span className={s.stopThumb} style={{ backgroundImage: `url(${st.landmark.thumb})` }} />
+                {st.landmark && !rolling
+                  ? <span className={s.stopThumb} style={{ backgroundImage: `url(${st.landmark.thumb})` }} />
+                  : <span className={`${s.stopThumb} ${s.stopMystery}`}>?</span>}
                 <span className={s.stopText}>
-                  <span className={s.stopKicker}>London picked</span>
-                  <span className={s.stopName}>{rolling ?? st.landmark.name}</span>
-                  <span className={s.stopArea}>{rolling ? '· · ·' : st.landmark.area}</span>
+                  <span className={s.stopKicker}>{st.landmark ? 'London picked' : 'Mystery stop'}</span>
+                  <span className={s.stopName}>{rolling ?? st.landmark?.name ?? '???'}</span>
+                  <span className={s.stopArea}>{rolling ? '· · ·' : st.landmark?.area ?? 'Let London choose for you'}</span>
                 </span>
-                <button type="button" onClick={shuffle} disabled={!!rolling} className={s.ghostBtn}>Shuffle ↻</button>
+                <button type="button" onClick={shuffle} disabled={!!rolling} className={st.landmark ? s.ghostBtn : s.chooseBtn}>{st.landmark ? 'Shuffle Innit ↻' : 'Choose Innit'}</button>
               </div>
             </div>
 
@@ -128,10 +132,12 @@ export default function Night() {
               </div>
             </div>
             <div className={s.btnRow}>
-              <button type="button" onClick={st.download} className={s.primary}>Download card (PNG)</button>
-              <button type="button" onClick={st.post} className={s.secondary}>Post on X, then attach it</button>
+              <button type="button" onClick={st.download} disabled={!st.landmark} className={s.primary}>Download card (PNG)</button>
+              <button type="button" onClick={st.post} disabled={!st.landmark} className={s.secondary}>Post on X, then attach it</button>
             </div>
-            <p className={s.note}>Preview. The download is the full 2400 × 1350 image. Unofficial and just for fun, your photo never leaves your browser.</p>
+            <p className={s.note}>{st.landmark
+              ? 'Preview. The download is the full 2400 × 1350 image. Your photo never leaves your browser.'
+              : 'Hit Choose Innit to find out where London sends you, then download your card.'}</p>
           </div>
         </div>
       </section>
@@ -139,7 +145,7 @@ export default function Night() {
       <footer className={s.footer}>
         <div className={s.logoBig}><img src="/assets/cyl-logo.png" alt="Choose Your London" className={s.logoImg} /></div>
         <div className={s.footerRow}>
-          <span>A Superteam UK campaign for Solana Breakpoint 2026 · Unofficial</span>
+          <span>A Superteam UK campaign for Solana Breakpoint 2026 · <a href="https://dub.sh/chooselondoninnit" target="_blank" rel="noopener" className={s.ticketLink}>Get your tickets</a></span>
           <span>Built by <a href="https://x.com/deandev10" target="_blank" rel="noopener" className={s.footerLink}>@deandev10</a> for <a href="https://x.com/SuperteamUK" target="_blank" rel="noopener" className={s.footerLink}>Superteam UK</a></span>
         </div>
       </footer>
@@ -153,8 +159,10 @@ export default function Night() {
           <button type="button" onClick={closeDrawer} aria-label="Close episodes" className={s.closeBtn}>Close</button>
         </div>
         <div className={s.drawerBody}>
-          <h3 className={s.h3}>Five weeks, five skits, one very long commute to <em>Breakpoint.</em></h3>
-          <p className={s.drawerText}>A satirical weekly series telling the London story. Each episode premieres on the Solana Ecosystem Call, then lands on X.</p>
+          <h3 className={s.h3}>Watch the <em>Choose Your London</em> Skits Series</h3>
+          <p className={s.drawerText}>A satirical series featuring 5 exclusive episodes, all telling the story of ‘Why London?’</p>
+          <p className={s.drawerText}>1 episode drops every week for the next 5 weeks.</p>
+          <p className={s.drawerText}>Be the first to watch each premiere episode.</p>
           <div className={s.nextBox}>
             <span className={s.nextLabel}>Next up · {nextLabel} · {nextDate}</span>
             <span className={s.nextCount}>{count}</span>
@@ -165,7 +173,7 @@ export default function Night() {
                 <span className={s.thumb}>
                   <span className={s.thumbImg} style={{
                     backgroundImage: e.n % 2 ? 'url(/assets/royal-exchange.jpg)' : 'url(/assets/somerset-house.jpg)',
-                    filter: e.out ? 'none' : 'blur(5px) brightness(.4) saturate(.5)',
+                    filter: 'blur(5px) brightness(.4) saturate(.5)', // thumbnails stay hidden
                   }} />
                   <span className={s.thumbNum}>EP {pad(e.n)}</span>
                 </span>

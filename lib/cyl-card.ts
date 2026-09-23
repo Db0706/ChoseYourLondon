@@ -36,7 +36,11 @@ export const LANDMARKS: Landmark[] = [
   { id: 'olympia', name: 'Olympia London', area: 'Kensington · the venue', photo: '/landmarks/olympia.jpg', thumb: '/landmarks/thumbs/olympia.jpg', baked: true },
 ];
 
-export const randomLandmark = (excludeId?: string) => {
+// Shown until the visitor presses "Choose Innit": a dark card with ??? where the landmark goes.
+export const MYSTERY: Landmark = { id: 'mystery', name: '???', area: '' };
+export const MYSTERY_COLOUR = '#16161A';
+
+export const randomLandmark = (excludeId?: string | null) => {
   const pool = LANDMARKS.filter(l => l.id !== excludeId);
   return pool[Math.floor(Math.random() * pool.length)];
 };
@@ -44,10 +48,10 @@ export const randomLandmark = (excludeId?: string) => {
 // Pillar-box red, used for the no-photo cards and the avatar ring.
 export const CARD_COLOUR = '#E3120B';
 
-// Weekly drops on Thursdays (UTC 16:00 ≈ 5pm London) up to Breakpoint.
-export const EPISODES = [1, 2, 3, 4, 5].map(n => ({
-  n, date: new Date(Date.UTC(2026, 8, 24 + 7 * (n - 1), 16, 0)),
-  title: n === 1 ? 'The Premiere' : 'Under wraps',
+// Weekly drops on Thursdays at 4PM BST (15:00 UTC) up to Breakpoint.
+const EPISODE_TITLES = ['Doomer', 'You’ll Be Fine', 'The Intern', 'Departed', 'Choose Your London'];
+export const EPISODES = EPISODE_TITLES.map((title, i) => ({
+  n: i + 1, title, date: new Date(Date.UTC(2026, 8, 24 + 7 * i, 15, 0)),
 }));
 
 export const pad = (n: number) => String(n).padStart(2, '0');
@@ -121,6 +125,7 @@ export type CardOptions = {
   colour: string;
   name: string;
   handle: string;
+  company: string;
   avatar: string | null;
   fonts: CardFonts;
   isCurrent?: () => boolean;
@@ -165,9 +170,11 @@ export async function renderCard(canvas: HTMLCanvasElement, o: CardOptions) {
     const lw = W * 0.62, lh = lw * logo.height / logo.width;
     ctx.drawImage(tint(logo, ink), (W - lw) / 2, 150, lw, lh);
     ctx.fillStyle = ink; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; spaced(ctx, 0);
-    fit(ctx, lm.name, s => `italic ${s}px ${serif}`, 120, W * 0.7);
-    ctx.fillText(lm.name, W / 2, 150 + lh + 110);
-    ctx.globalAlpha = 0.35; ctx.fillRect(130, 150 + lh + 150, W - 260, 3); ctx.globalAlpha = 1;
+    if (lm.id === MYSTERY.id) { ctx.fillStyle = '#F2140F'; ctx.font = `italic 220px ${serif}`; }
+    else fit(ctx, lm.name, s => `italic ${s}px ${serif}`, 120, W * 0.7);
+    ctx.fillText(lm.name, W / 2, 150 + lh + (lm.id === MYSTERY.id ? 185 : 110));
+    ctx.fillStyle = ink;
+    if (lm.id !== MYSTERY.id) { ctx.globalAlpha = 0.35; ctx.fillRect(130, 150 + lh + 150, W - 260, 3); ctx.globalAlpha = 1; }
   }
 
   // top tags
@@ -192,15 +199,24 @@ export async function renderCard(canvas: HTMLCanvasElement, o: CardOptions) {
   ctx.restore();
 
   const tx = ax + R + 64;
+  const company = o.company.trim();
+  // With a company line the block shifts up so all three lines sit beside the avatar.
+  const [yName, yCompany, ySub] = company ? [fy + 2, fy + 62, fy + 114] : [fy + 20, 0, fy + 84];
   ctx.fillStyle = fg; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; spaced(ctx, 0);
   fit(ctx, o.name, s => `${s}px ${serif}`, 120, 1080);
-  ctx.fillText(o.name, tx, fy + 20);
-  ctx.font = `500 29px ${mono}`; spaced(ctx, 4); ctx.globalAlpha = 0.88;
-  ctx.fillText(((o.handle ? '@' + o.handle + '  ·  ' : '') + 'MY STOP: ' + lm.name).toUpperCase(), tx + 3, fy + 84);
+  ctx.fillText(o.name, tx, yName);
+  if (company) {
+    ctx.font = `500 32px ${mono}`; spaced(ctx, 4);
+    let c = company.toUpperCase();
+    while (ctx.measureText(c).width > 1060 && c.length > 4) c = c.slice(0, -2) + '…';
+    ctx.fillText(c, tx + 3, yCompany);
+  }
+  ctx.font = `500 29px ${mono}`; spaced(ctx, 4); ctx.globalAlpha = 0.8;
+  ctx.fillText(((o.handle ? '@' + o.handle + '  ·  ' : '') + 'MY STOP: ' + lm.name).toUpperCase(), tx + 3, ySub);
 
-  ctx.textAlign = 'right';
-  ctx.fillText('SOLANA BREAKPOINT 2026', W - 130, fy + 20);
-  ctx.fillText('OLYMPIA LONDON · 15–17 NOV', W - 130, fy + 84);
+  ctx.globalAlpha = 0.88; ctx.textAlign = 'right';
+  ctx.fillText('SOLANA BREAKPOINT 2026', W - 130, company ? yCompany : yName);
+  ctx.fillText('OLYMPIA LONDON · 15–17 NOV', W - 130, ySub);
   ctx.restore();
 }
 

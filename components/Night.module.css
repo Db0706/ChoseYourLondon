@@ -61,9 +61,6 @@
 .controls { flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 48px; }
 .step { display: flex; flex-direction: column; gap: 22px; }
 .stepTight { display: flex; flex-direction: column; gap: 18px; }
-.stepLabel { display: flex; gap: 14px; font: 500 12px var(--mono), monospace; letter-spacing: .16em; text-transform: uppercase; color: #9C978F; }
-.stepLabelSplit { display: flex; justify-content: space-between; gap: 12px; font: 500 12px var(--mono), monospace; letter-spacing: .16em; text-transform: uppercase; color: #9C978F; }
-.stepLabelLeft { display: flex; gap: 14px; }
 .handleRow { display: flex; gap: 12px; align-items: flex-end; }
 .field { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
 .fieldLabel { font-size: 13px; color: #9C978F; }
@@ -86,6 +83,15 @@
 .stopKicker { font: 500 10px var(--mono), monospace; letter-spacing: .14em; text-transform: uppercase; color: #9C978F; }
 .stopName { font: italic 400 30px/1.02 var(--serif), serif; color: #F2140F; text-wrap: balance; }
 .stopArea { font: 500 10px var(--mono), monospace; letter-spacing: .12em; text-transform: uppercase; color: #8A857D; }
+.stopMystery { display: grid; place-items: center; background: repeating-linear-gradient(135deg, #17171B 0 8px, #1d1d22 8px 16px); font: italic 400 36px var(--serif), serif; color: #F2140F; }
+.chooseBtn { flex: none; padding: 13px 20px; border-radius: 999px; border: 0; background: #F2140F; color: #fff; font: 600 14px var(--sans), sans-serif; cursor: pointer; box-shadow: 0 0 0 0 rgba(242, 20, 15, .6); animation: choosePulse 1.8s ease-out infinite; }
+.chooseBtn:hover { background: #F3EFE7; color: #0A0A0C; }
+.chooseBtn:disabled { animation: none; opacity: .7; cursor: default; }
+@keyframes choosePulse { 0% { box-shadow: 0 0 0 0 rgba(242, 20, 15, .55); } 100% { box-shadow: 0 0 0 14px rgba(242, 20, 15, 0); } }
+@media (prefers-reduced-motion: reduce) { .chooseBtn { animation: none; } }
+.primary:disabled, .secondary:disabled { opacity: .35; cursor: not-allowed; }
+.ticketLink { color: #F2140F; text-decoration: underline; text-underline-offset: 3px; }
+.ticketLink:hover { color: #F3EFE7; }
 .ghostBtn:disabled { opacity: .6; cursor: default; }
 
 
