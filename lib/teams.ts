@@ -19,7 +19,7 @@ export const TEAMS: Team[] = [
   { id: 'sg', name: 'Superteam Singapore', flag: '🇸🇬', countries: ['SG'] },
   // Active in Croatia, Serbia, Montenegro, Slovenia, Bulgaria and Romania, plus the rest of the Balkans.
   { id: 'balkan', name: 'Superteam Balkan', flag: '🏔️', countries: ['HR', 'RS', 'ME', 'SI', 'BG', 'RO', 'BA', 'MK', 'XK', 'AL'] },
-  { id: 'kr', name: 'Superteam Korea', flag: '🇰🇷', countries: ['KR'] },
+  { id: 'kr', name: 'Superteam South Korea', flag: '🇰🇷', countries: ['KR'] }, // KR = South Korea (North Korea is KP, not included)
   { id: 'de', name: 'Superteam Germany', flag: '🇩🇪', countries: ['DE'] },
   { id: 'us', name: 'Superteam USA', flag: '🇺🇸', countries: ['US', 'PR'] },
   { id: 'ie', name: 'Superteam Ireland', flag: '🇮🇪', countries: ['IE'] },
