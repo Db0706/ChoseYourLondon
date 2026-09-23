@@ -1,21 +1,20 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from 'react';
-import { COLOURS, LANDMARKS, download as downloadCanvas, loadImage, renderCard } from './cyl-card';
+import { CARD_COLOUR, LANDMARKS, download as downloadCanvas, loadImage, renderCard } from './cyl-card';
 import { SITE_URL } from './config';
 import { cardFonts } from './fonts';
 
 const cleanHandle = (v: string) => v.replace(/^https?:\/\/(www\.)?(x|twitter)\.com\//i, '').replace(/^@/, '').replace(/[^A-Za-z0-9_]/g, '').slice(0, 15);
 
-type Options = { landmarkId: string; colourIdx: number; photoStatus?: string };
+type Options = { landmarkId: string; photoStatus?: string };
 
-export function useCardStudio({ landmarkId: initialLandmark, colourIdx: initialColour, photoStatus }: Options) {
+export function useCardStudio({ landmarkId: initialLandmark, photoStatus }: Options) {
   const [handle, setHandle] = useState('');
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState<string | null>(null);
   const [customPhoto, setCustomPhoto] = useState<string | null>(null);
   const [landmarkId, setLandmarkId] = useState(initialLandmark);
-  const [colourIdx, setColourIdx] = useState(initialColour);
   const [status, setStatus] = useState('');
   // null until mounted so server and client render the same markup.
   const [now, setNow] = useState<number | null>(null);
@@ -29,14 +28,13 @@ export function useCardStudio({ landmarkId: initialLandmark, colourIdx: initialC
   }, []);
 
   const landmark = LANDMARKS.find(l => l.id === landmarkId) || LANDMARKS[0];
-  const colour = COLOURS[colourIdx];
   const cardName = name.trim() || handle || 'Your community';
 
   useEffect(() => {
     const c = canvasRef.current; if (!c) return;
     const t = ++tok.current;
-    renderCard(c, { landmark, colour: colour.hex, name: cardName, handle, avatar, customPhoto, fonts: cardFonts, isCurrent: () => t === tok.current });
-  }, [landmark, colour, cardName, handle, avatar, customPhoto]);
+    renderCard(c, { landmark, colour: CARD_COLOUR, name: cardName, handle, avatar, customPhoto, fonts: cardFonts, isCurrent: () => t === tok.current });
+  }, [landmark, cardName, handle, avatar, customPhoto]);
 
   const pull = useCallback(async () => {
     const h = handle;
@@ -69,15 +67,14 @@ export function useCardStudio({ landmarkId: initialLandmark, colourIdx: initialC
     const text = `${who} chose ${landmark.name}.\n\nChoose your London. See you at Solana Breakpoint, 15–17 Nov.\n\n(make yours: ${url})`;
     window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(text), '_blank', 'noopener');
   };
-  const shuffle = () => setColourIdx(p => { let n; do { n = Math.floor(Math.random() * COLOURS.length); } while (n === p && COLOURS.length > 1); return n; });
 
   return {
-    handle, name, status, now, landmark, landmarkId, colour, colourIdx, canvasRef,
+    handle, name, status, now, landmark, landmarkId, canvasRef,
     onHandle: (e: ChangeEvent<HTMLInputElement>) => setHandle(cleanHandle(e.target.value)),
     onHandleKey: (e: KeyboardEvent<HTMLInputElement>) => { if (e.key === 'Enter') pull(); },
     onName: (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value.slice(0, 40)),
     pull, onAvatarFile: readInto('avatar'), onPhotoFile: readInto('customPhoto'),
     pickLandmark: (id: string) => { setLandmarkId(id); setCustomPhoto(null); },
-    pickColour: setColourIdx, shuffle, download, post,
+    download, post,
   };
 }

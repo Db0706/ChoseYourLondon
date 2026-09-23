@@ -2,13 +2,13 @@
 
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from 'react';
-import { COLOURS, LANDMARKS, type EpisodeInfo, countdown, episodeInfo, fmtDate, pad } from '@/lib/cyl-card';
+import { LANDMARKS, type EpisodeInfo, countdown, episodeInfo, fmtDate, pad } from '@/lib/cyl-card';
 import { LUMA_URL, WATCH_URL } from '@/lib/config';
 import { useCardStudio } from '@/lib/useCardStudio';
 import s from './Night.module.css';
 
 export default function Night() {
-  const st = useCardStudio({ landmarkId: 'royal-exchange', colourIdx: 0 });
+  const st = useCardStudio({ landmarkId: 'royal-exchange' });
   const [drawer, setDrawer] = useState(false);
   const openDrawer = () => setDrawer(true);
   const closeDrawer = () => setDrawer(false);
@@ -68,7 +68,7 @@ export default function Night() {
       <section id="studio" className={s.studio}>
         <div className={s.studioHead}>
           <h2 className={s.h2}>The card <em>studio</em></h2>
-          <p className={s.studioIntro}>Three steps. It all happens in your browser, and nothing gets posted until you post it.</p>
+          <p className={s.studioIntro}>Two steps. It all happens in your browser, and nothing gets posted until you post it.</p>
         </div>
 
         <div className={s.studioRow}>
@@ -107,21 +107,10 @@ export default function Night() {
               </label>
               <div className={s.photoRow}>
                 <label className={s.photoUpload}>Use your own landmark photo<input type="file" accept="image/*" onChange={st.onPhotoFile} className={s.hidden} /></label>
-                <span>Otherwise it prints as a colour card.</span>
+                <span>Otherwise it prints as a red card.</span>
               </div>
             </div>
 
-            <div className={s.stepTight}>
-              <div className={s.stepLabel}><span className={s.red}>03</span>Colour</div>
-              <div className={s.swatches}>
-                {COLOURS.map((c, i) => (
-                  <button key={c.hex} type="button" onClick={() => st.pickColour(i)} title={c.name} aria-label={c.name} className={s.swatch}
-                    style={{ background: c.hex, boxShadow: i === st.colourIdx ? '0 0 0 3px #0A0A0C, 0 0 0 5px #F3EFE7' : 'none' }} />
-                ))}
-                <button type="button" onClick={st.shuffle} className={s.smallBtn}>Shuffle</button>
-                <span className={s.colourName}>{st.colour.name}</span>
-              </div>
-            </div>
           </div>
 
           <div className={s.preview}>

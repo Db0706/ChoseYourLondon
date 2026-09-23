@@ -3,7 +3,6 @@ export const W = 2400, H = 1350;
 const LOGO = '/assets/cyl-logo.png';
 
 export type Landmark = { id: string; name: string; area: string; photo?: string; baked?: boolean };
-export type Colour = { name: string; hex: string };
 
 // Add a clean (no-text) photo path to any landmark to turn it into a photo card.
 // `baked: true` = the photo already contains the CHOOSE YOUR LONDON wordmark.
@@ -26,14 +25,8 @@ export const LANDMARKS: Landmark[] = [
   { id: 'olympia', name: 'Olympia London', area: 'Kensington · the venue' },
 ];
 
-export const COLOURS: Colour[] = [
-  { name: 'Pillar Box', hex: '#E3120B' },
-  { name: 'Elizabeth', hex: '#7B2FE0' },
-  { name: 'Racing Green', hex: '#0E5A3A' },
-  { name: 'Thames', hex: '#1F3FAE' },
-  { name: 'Black Cab', hex: '#15151A' },
-  { name: 'Cab Light', hex: '#F2B705' },
-];
+// Pillar-box red, used for the no-photo cards and the avatar ring.
+export const CARD_COLOUR = '#E3120B';
 
 // Weekly drops on Thursdays (UTC 16:00 ≈ 5pm London) up to Breakpoint.
 export const EPISODES = [1, 2, 3, 4, 5].map(n => ({
