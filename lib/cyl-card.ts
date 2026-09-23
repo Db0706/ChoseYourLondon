@@ -118,16 +118,6 @@ export type CardOptions = {
   isCurrent?: () => boolean;
 };
 
-// Mix a hex colour towards white so it stays readable on the dark info panel.
-function lighten(hex: string, amt: number) {
-  const n = parseInt(hex.slice(1), 16), m = (v: number) => Math.round(v + (255 - v) * amt);
-  return `rgb(${m(n >> 16)},${m((n >> 8) & 255)},${m(n & 255)})`;
-}
-const accentOn = (hex: string) => { const l = lum(hex); return l < 0.02 ? '#F3EFE7' : l < 0.12 ? lighten(hex, 0.45) : hex; };
-
-// Split layout: info panel on the left, a big photo panel on the right.
-const PANEL = 1080, PAD = 110, BG = '#0A0A0C', TEXT_MAX = PANEL - PAD * 2;
-
 export async function renderCard(canvas: HTMLCanvasElement, o: CardOptions) {
   const { serif, mono } = o.fonts;
   try { await Promise.all([`120px ${serif}`, `italic 120px ${serif}`, `500 32px ${mono}`].map(f => document.fonts.load(f))); } catch {}
@@ -144,68 +134,65 @@ export async function renderCard(canvas: HTMLCanvasElement, o: CardOptions) {
   if (canvas.height !== H) canvas.height = H;
   const ctx = canvas.getContext('2d')!;
   ctx.save(); ctx.clearRect(0, 0, W, H);
-  const accent = accentOn(col);
-  ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+  const ink = inkOn(col);
+  let fg = '#FFFFFF';
 
-  // ---- right: the big image panel ----
-  const rx = PANEL, rw = W - PANEL;
-  ctx.save(); ctx.beginPath(); ctx.rect(rx, 0, rw, H); ctx.clip();
-  if (avatar) {
-    ctx.fillStyle = col; ctx.fillRect(rx, 0, rw, H);
-    cover(ctx, avatar, rx, 0, rw, H);
-  } else if (photo && baked) {
-    // The wordmark is baked into these photos, so show the whole frame over a blurred fill.
-    ctx.filter = 'blur(40px) brightness(.55)'; cover(ctx, photo, rx - 80, -80, rw + 160, H + 160); ctx.filter = 'none';
-    const ih = rw * photo.height / photo.width;
-    ctx.drawImage(photo, rx, (H - ih) / 2, rw, ih);
-  } else if (photo) {
-    cover(ctx, photo, rx, 0, rw, H);
+  if (photo) {
+    cover(ctx, photo, 0, 0, W, H);
+    if (!baked) {
+      ctx.fillStyle = 'rgba(8,8,10,.22)'; ctx.fillRect(0, 0, W, H);
+      const lw = W * 0.72, lh = lw * logo.height / logo.width;
+      ctx.drawImage(tint(logo, col), (W - lw) / 2, 150, lw, lh);
+    }
+    let g = ctx.createLinearGradient(0, 0, 0, 260); g.addColorStop(0, 'rgba(0,0,0,.45)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, 260);
+    g = ctx.createLinearGradient(0, H * 0.5, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.88)');
+    ctx.fillStyle = g; ctx.fillRect(0, H * 0.5, W, H * 0.5);
   } else {
-    const ink = inkOn(col);
-    ctx.fillStyle = col; ctx.fillRect(rx, 0, rw, H);
-    const r = ctx.createRadialGradient(rx + rw / 2, H * 0.42, 80, rx + rw / 2, H / 2, rw * 0.9);
-    r.addColorStop(0, 'rgba(255,255,255,.12)'); r.addColorStop(1, 'rgba(0,0,0,.35)');
-    ctx.fillStyle = r; ctx.fillRect(rx, 0, rw, H);
-    ctx.fillStyle = ink; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; spaced(ctx, 0);
-    ctx.font = `560px ${serif}`; ctx.fillText(initials(o.name), rx + rw / 2, H / 2 + 30);
+    fg = ink;
+    ctx.fillStyle = col; ctx.fillRect(0, 0, W, H);
+    const r = ctx.createRadialGradient(W / 2, H * 0.42, 100, W / 2, H / 2, W * 0.72);
+    r.addColorStop(0, 'rgba(255,255,255,.10)'); r.addColorStop(1, 'rgba(0,0,0,.30)');
+    ctx.fillStyle = r; ctx.fillRect(0, 0, W, H);
+    const lw = W * 0.62, lh = lw * logo.height / logo.width;
+    ctx.drawImage(tint(logo, ink), (W - lw) / 2, 150, lw, lh);
+    ctx.fillStyle = ink; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; spaced(ctx, 0);
+    fit(ctx, lm.name, s => `italic ${s}px ${serif}`, 120, W * 0.7);
+    ctx.fillText(lm.name, W / 2, 150 + lh + 110);
+    ctx.globalAlpha = 0.35; ctx.fillRect(130, 150 + lh + 150, W - 260, 3); ctx.globalAlpha = 1;
   }
-  // soft shade top and bottom so the tags stay legible
-  let g = ctx.createLinearGradient(0, 0, 0, 240); g.addColorStop(0, 'rgba(0,0,0,.5)'); g.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = g; ctx.fillRect(rx, 0, rw, 240);
-  g = ctx.createLinearGradient(0, H - 300, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.7)');
-  ctx.fillStyle = g; ctx.fillRect(rx, H - 300, rw, 300);
-  ctx.fillStyle = '#FFFFFF'; ctx.font = `500 26px ${mono}`; spaced(ctx, 5); ctx.textBaseline = 'alphabetic'; ctx.globalAlpha = 0.9;
-  ctx.textAlign = 'right'; ctx.fillText('A SUPERTEAM UK CAMPAIGN', W - 90, 100);
-  ctx.fillText(('CHOSE ' + lm.name + ' · ' + lm.area).toUpperCase(), W - 90, H - 90);
+
+  // top tags
+  ctx.fillStyle = fg; ctx.font = `500 28px ${mono}`; spaced(ctx, 5); ctx.textBaseline = 'alphabetic';
+  ctx.globalAlpha = 0.9;
+  ctx.textAlign = 'left'; ctx.fillText('#CHOOSEYOURLONDON', 130, 110);
+  ctx.textAlign = 'right'; ctx.fillText('A SUPERTEAM UK CAMPAIGN', W - 130, 110);
   ctx.globalAlpha = 1;
-  ctx.restore();
 
-  // ---- divider with a few glitchy ticks ----
-  ctx.fillStyle = 'rgba(243,239,231,.14)'; ctx.fillRect(PANEL - 1, 0, 2, H);
-  ctx.fillStyle = accent;
-  [[PANEL - 44, 300, 28, 12], [PANEL - 70, 390, 56, 5], [PANEL - 30, 820, 22, 10], [PANEL - 58, 1010, 40, 4]].forEach(([x, y, w, h]) => ctx.fillRect(x, y, w, h));
-
-  // ---- left: info panel ----
-  const lw = 540, lh = lw * logo.height / logo.width;
-  ctx.drawImage(tint(logo, accent), PAD, PAD, lw, lh);
-
-  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; spaced(ctx, 0);
-  ctx.fillStyle = '#F3EFE7';
-  fit(ctx, o.name, s => `${s}px ${serif}`, 150, TEXT_MAX);
-  ctx.fillText(o.name, PAD - 4, 700);
-  let y = 700;
-  if (o.handle) {
-    ctx.fillStyle = accent; ctx.font = `500 36px ${mono}`; spaced(ctx, 2);
-    ctx.fillText('@' + o.handle, PAD, (y += 78));
+  // footer: big avatar + name
+  const R = 150, ax = 130 + R, fy = H - 100 - R;
+  if (photo) { ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 60; ctx.shadowOffsetY = 16; ctx.beginPath(); ctx.arc(ax, fy, R + 12, 0, Math.PI * 2); ctx.fillStyle = col; ctx.fill(); ctx.restore(); }
+  ctx.save(); ctx.beginPath(); ctx.arc(ax, fy, R, 0, Math.PI * 2); ctx.closePath();
+  if (avatar) { ctx.clip(); cover(ctx, avatar, ax - R, fy - R, 2 * R, 2 * R); }
+  else {
+    ctx.fillStyle = photo ? col : ink; ctx.fill();
+    ctx.fillStyle = photo ? inkOn(col) : col; spaced(ctx, 0);
+    ctx.font = `170px ${serif}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(initials(o.name), ax, fy + 12);
   }
-  ctx.fillStyle = 'rgba(243,239,231,.55)'; ctx.font = `500 26px ${mono}`; spaced(ctx, 5);
-  ctx.fillText('CHOSE', PAD, (y += 110));
-  ctx.fillStyle = accent; spaced(ctx, 0);
-  fit(ctx, lm.name, s => `italic ${s}px ${serif}`, 92, TEXT_MAX);
-  ctx.fillText(lm.name, PAD - 2, (y += 90));
+  ctx.restore();
+  ctx.beginPath(); ctx.arc(ax, fy, R + 12, 0, Math.PI * 2); ctx.strokeStyle = photo ? col : ink; ctx.lineWidth = 10; ctx.stroke();
 
-  ctx.fillStyle = accent; ctx.font = `500 27px ${mono}`; spaced(ctx, 4);
-  ['SOLANA BREAKPOINT 2026', '15–17 NOVEMBER 2026', 'OLYMPIA LONDON ⊕ UNITED KINGDOM', '#CHOOSEYOURLONDON'].forEach((t, i) => ctx.fillText(t, PAD, 1098 + i * 48));
+  const tx = ax + R + 64;
+  ctx.fillStyle = fg; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; spaced(ctx, 0);
+  fit(ctx, o.name, s => `${s}px ${serif}`, 120, 1080);
+  ctx.fillText(o.name, tx, fy + 20);
+  ctx.font = `500 29px ${mono}`; spaced(ctx, 4); ctx.globalAlpha = 0.88;
+  ctx.fillText(((o.handle ? '@' + o.handle + '  ·  ' : '') + 'CHOSE ' + lm.name).toUpperCase(), tx + 3, fy + 84);
+
+  ctx.textAlign = 'right';
+  ctx.fillText('SOLANA BREAKPOINT 2026', W - 130, fy + 20);
+  ctx.fillText('OLYMPIA LONDON · 15–17 NOV', W - 130, fy + 84);
   ctx.restore();
 }
 

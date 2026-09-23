@@ -97,20 +97,14 @@ export default function Night() {
 
             <div className={s.stepTight}>
               <div className={s.stepLabelSplit}><span className={s.stepLabelLeft}><span className={s.red}>02</span>Your landmark</span><span>{LANDMARKS.length} stops</span></div>
-              <div className={s.landmarkGrid}>
-                {LANDMARKS.map((lm, i) => {
-                  const on = lm.id === st.landmarkId;
-                  return (
-                    <button key={lm.id} type="button" onClick={() => st.pickLandmark(lm.id)} aria-pressed={on} className={s.landmark} style={{ color: on ? '#F2140F' : '#F3EFE7' }}>
-                      <span className={s.lmNum}>{pad(i + 1)}</span>
-                      <span className={s.lmText}>
-                        <span className={s.lmName} style={{ fontStyle: on ? 'italic' : 'normal' }}>{lm.name}</span>
-                        <span className={s.lmArea}>{lm.area}{lm.photo && <span className={s.lmPhoto}>· photo</span>}</span>
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
+              <label className={s.selectWrap}>
+                <span className={s.fieldLabel}>Pick a stop</span>
+                <select value={st.landmarkId} onChange={e => st.pickLandmark(e.target.value)} className={s.select}>
+                  {LANDMARKS.map((lm, i) => (
+                    <option key={lm.id} value={lm.id}>{pad(i + 1)} · {lm.name} — {lm.area}{lm.photo ? ' (photo)' : ''}</option>
+                  ))}
+                </select>
+              </label>
               <div className={s.photoRow}>
                 <label className={s.photoUpload}>Use your own landmark photo<input type="file" accept="image/*" onChange={st.onPhotoFile} className={s.hidden} /></label>
                 <span>Otherwise it prints as a colour card.</span>
