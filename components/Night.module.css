@@ -18,6 +18,13 @@
 .heroImg { position: absolute; left: -3%; top: -3%; width: 106%; height: 106%; object-fit: cover; }
 .heroShade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10, 10, 12, .15) 0%, rgba(10, 10, 12, 0) 55%, rgba(10, 10, 12, .6) 85%, #0A0A0C 100%); }
 .heroBottom { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 clamp(16px, 4vw, 56px) clamp(28px, 5vh, 56px); display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 28px; }
+/* Portrait screens: show the whole photo so the baked-in wordmark isn't cropped */
+@media (max-aspect-ratio: 1/1) {
+  .hero { height: auto; min-height: 0; padding-top: 76px; }
+  .heroImg { position: relative; display: block; left: 0; top: 0; width: 100%; height: auto; aspect-ratio: 1280/853; }
+  .heroShade { top: 76px; bottom: auto; height: calc(100vw * 853 / 1280); background: linear-gradient(180deg, rgba(10, 10, 12, 0) 70%, #0A0A0C 100%); }
+  .heroBottom { position: relative; padding-top: 28px; }
+}
 .scrollCue { display: flex; flex-direction: column; gap: 10px; font: 500 11px var(--mono), monospace; letter-spacing: .18em; text-transform: uppercase; color: #D6D1C8; }
 .scrollCue:hover { color: #F2140F; }
 .red { color: #F2140F; }
