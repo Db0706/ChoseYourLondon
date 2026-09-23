@@ -122,7 +122,6 @@ export type CardOptions = {
   name: string;
   handle: string;
   avatar: string | null;
-  customPhoto: string | null;
   fonts: CardFonts;
   isCurrent?: () => boolean;
 };
@@ -132,8 +131,8 @@ export async function renderCard(canvas: HTMLCanvasElement, o: CardOptions) {
   try { await Promise.all([`120px ${serif}`, `italic 120px ${serif}`, `500 32px ${mono}`].map(f => document.fonts.load(f))); } catch {}
   const logo = await trimmedLogo();
   const lm = o.landmark, col = o.colour;
-  const photoSrc = o.customPhoto || lm.photo;
-  const baked = !o.customPhoto && lm.baked;
+  const photoSrc = lm.photo;
+  const baked = lm.baked;
   let photo: HTMLImageElement | null = null, avatar: HTMLImageElement | null = null;
   if (photoSrc) { try { photo = await loadImage(photoSrc); } catch {} }
   if (o.avatar) { try { avatar = await loadImage(o.avatar, /^https?:/.test(o.avatar)); } catch {} }

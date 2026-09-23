@@ -7,14 +7,13 @@ import { cardFonts } from './fonts';
 
 const cleanHandle = (v: string) => v.replace(/^https?:\/\/(www\.)?(x|twitter)\.com\//i, '').replace(/^@/, '').replace(/[^A-Za-z0-9_]/g, '').slice(0, 15);
 
-type Options = { landmarkId: string; photoStatus?: string };
+type Options = { landmarkId: string };
 
 
-export function useCardStudio({ landmarkId: initialLandmark, photoStatus }: Options) {
+export function useCardStudio({ landmarkId: initialLandmark }: Options) {
   const [handle, setHandle] = useState('');
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState<string | null>(null);
-  const [customPhoto, setCustomPhoto] = useState<string | null>(null);
   const [landmarkId, setLandmarkId] = useState(initialLandmark);
   const [status, setStatus] = useState('');
   // null until mounted so server and client render the same markup.
@@ -37,8 +36,8 @@ export function useCardStudio({ landmarkId: initialLandmark, photoStatus }: Opti
   useEffect(() => {
     const c = canvasRef.current; if (!c) return;
     const t = ++tok.current;
-    renderCard(c, { landmark, colour: CARD_COLOUR, name: cardName, handle, avatar, customPhoto, fonts: cardFonts, isCurrent: () => t === tok.current });
-  }, [landmark, cardName, handle, avatar, customPhoto]);
+    renderCard(c, { landmark, colour: CARD_COLOUR, name: cardName, handle, avatar, fonts: cardFonts, isCurrent: () => t === tok.current });
+  }, [landmark, cardName, handle, avatar]);
 
   const pull = useCallback(async () => {
     const h = handle;
@@ -53,14 +52,10 @@ export function useCardStudio({ landmarkId: initialLandmark, photoStatus }: Opti
     }
   }, [handle]);
 
-  const readInto = (key: 'avatar' | 'customPhoto') => (e: ChangeEvent<HTMLInputElement>) => {
+  const onAvatarFile = (e: ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files && e.target.files[0]; if (!f) return;
     const r = new FileReader();
-    r.onload = () => {
-      const url = r.result as string;
-      if (key === 'avatar') { setAvatar(url); setStatus('Logo added.'); }
-      else { setCustomPhoto(url); if (photoStatus) setStatus(photoStatus); }
-    };
+    r.onload = () => { setAvatar(r.result as string); setStatus('Logo added.'); };
     r.readAsDataURL(f); e.target.value = '';
   };
 
@@ -77,8 +72,8 @@ export function useCardStudio({ landmarkId: initialLandmark, photoStatus }: Opti
     onHandle: (e: ChangeEvent<HTMLInputElement>) => setHandle(cleanHandle(e.target.value)),
     onHandleKey: (e: KeyboardEvent<HTMLInputElement>) => { if (e.key === 'Enter') pull(); },
     onName: (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value.slice(0, 40)),
-    pull, onAvatarFile: readInto('avatar'), onPhotoFile: readInto('customPhoto'),
-    shuffleLandmark: () => { setLandmarkId(p => randomLandmark(p).id); setCustomPhoto(null); },
+    pull, onAvatarFile,
+    shuffleLandmark: () => setLandmarkId(p => randomLandmark(p).id),
     download, post,
   };
 }

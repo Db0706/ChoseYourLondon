@@ -87,9 +87,6 @@
 .stopName { font: italic 400 30px/1.02 var(--serif), serif; color: #F2140F; text-wrap: balance; }
 .stopArea { font: 500 10px var(--mono), monospace; letter-spacing: .12em; text-transform: uppercase; color: #8A857D; }
 .ghostBtn:disabled { opacity: .6; cursor: default; }
-.photoRow { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; font-size: 13px; color: #9C978F; }
-.photoUpload { padding: 9px 14px; border-radius: 999px; border: 1px dashed rgba(243, 239, 231, .3); color: #F3EFE7; font-weight: 600; cursor: pointer; }
-.photoUpload:hover { border-color: #F2140F; color: #F2140F; }
 
 
 .preview { flex: 1.7 1 540px; min-width: 0; position: relative; order: -1; top: 0; display: flex; flex-direction: column; gap: 18px; }

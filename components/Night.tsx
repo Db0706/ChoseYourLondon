@@ -117,10 +117,6 @@ export default function Night() {
                 </span>
                 <button type="button" onClick={shuffle} disabled={!!rolling} className={s.ghostBtn}>Shuffle ↻</button>
               </div>
-              <div className={s.photoRow}>
-                <label className={s.photoUpload}>Use your own landmark photo<input type="file" accept="image/*" onChange={st.onPhotoFile} className={s.hidden} /></label>
-                <span>Or let London pick for you.</span>
-              </div>
             </div>
 
           </div>
