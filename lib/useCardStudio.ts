@@ -5,6 +5,9 @@ import { CARD_COLOUR, LANDMARKS, MYSTERY, MYSTERY_COLOUR, randomLandmark, downlo
 import { SITE_URL } from './config';
 import { cardFonts } from './fonts';
 
+// Shown in the avatar circle until someone pulls from X or uploads their own.
+const DEFAULT_PFP = '/assets/default-pfp.jpg';
+
 const cleanHandle = (v: string) => v.replace(/^https?:\/\/(www\.)?(x|twitter)\.com\//i, '').replace(/^@/, '').replace(/[^A-Za-z0-9_]/g, '').slice(0, 15);
 
 export function useCardStudio() {
@@ -32,7 +35,7 @@ export function useCardStudio() {
   useEffect(() => {
     const c = canvasRef.current; if (!c) return;
     const t = ++tok.current;
-    renderCard(c, { landmark: landmark || MYSTERY, colour: landmark ? CARD_COLOUR : MYSTERY_COLOUR, name: cardName, handle, company, avatar, fonts: cardFonts, isCurrent: () => t === tok.current });
+    renderCard(c, { landmark: landmark || MYSTERY, colour: landmark ? CARD_COLOUR : MYSTERY_COLOUR, name: cardName, handle, company, avatar: avatar || DEFAULT_PFP, fonts: cardFonts, isCurrent: () => t === tok.current });
   }, [landmark, cardName, handle, company, avatar]);
 
   const pull = useCallback(async () => {
