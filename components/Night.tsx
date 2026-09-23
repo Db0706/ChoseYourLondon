@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from 'react';
 import { LANDMARKS, type EpisodeInfo, countdown, episodeInfo, fmtDate, pad } from '@/lib/cyl-card';
-import { LUMA_URL, WATCH_URL } from '@/lib/config';
+import { LUMA_URL } from '@/lib/config';
 import { useCardStudio } from '@/lib/useCardStudio';
 import BeanBoard from './BeanBoard';
 import BeanRain from './BeanRain';
@@ -155,21 +155,20 @@ export default function Night() {
       <div onClick={closeDrawer} className={s.overlay} style={{ opacity: drawer ? 1 : 0, pointerEvents: drawer ? 'auto' : 'none' }} />
       <aside aria-label="Episodes" inert={!drawer} className={s.drawer} style={{ transform: drawer ? 'translateX(0)' : 'translateX(105%)' }}>
         <div className={s.drawerHead}>
-          <span className={s.drawerKicker}><span className={s.dot} />The series</span>
           <button type="button" onClick={closeDrawer} aria-label="Close episodes" className={s.closeBtn}>Close</button>
         </div>
         <div className={s.drawerBody}>
           <h3 className={s.h3}>Watch the <em>Choose Your London</em> Skits Series</h3>
           <p className={s.drawerText}>A satirical series featuring 5 exclusive episodes, all telling the story of ‘Why London?’</p>
           <p className={s.drawerText}>1 episode drops every week for the next 5 weeks.</p>
-          <p className={s.drawerText}>Be the first to watch each premiere episode.</p>
+          <p className={s.drawerText}>Be the first to watch when a new episode drops.</p>
           <div className={s.nextBox}>
             <span className={s.nextLabel}>Next up · {nextLabel} · {nextDate}</span>
             <span className={s.nextCount}>{count}</span>
           </div>
           <div className={s.epList}>
             {info.list.map(e => (
-              <a key={e.n} href={e.out ? WATCH_URL : LUMA_URL} target="_blank" rel="noopener" className={s.ep}>
+              <a key={e.n} href={e.link || LUMA_URL} target="_blank" rel="noopener" className={s.ep}>
                 <span className={s.thumb}>
                   <span className={s.thumbImg} style={{
                     backgroundImage: e.n % 2 ? 'url(/assets/royal-exchange.jpg)' : 'url(/assets/somerset-house.jpg)',
@@ -188,10 +187,6 @@ export default function Night() {
               </a>
             ))}
           </div>
-        </div>
-        <div className={s.drawerFoot}>
-          <a href={LUMA_URL} target="_blank" rel="noopener" className={s.lumaBtn}>Get notified on Luma</a>
-          <span className={s.drawerNote}>Be first to watch every drop.</span>
         </div>
       </aside>
     </div>

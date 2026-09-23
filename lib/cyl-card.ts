@@ -49,9 +49,20 @@ export const randomLandmark = (excludeId?: string | null) => {
 export const CARD_COLOUR = '#E3120B';
 
 // Weekly drops on Thursdays at 4PM BST (15:00 UTC) up to Breakpoint.
-const EPISODE_TITLES = ['Doomer', 'You’ll Be Fine', 'The Intern', 'Departed', 'Choose Your London'];
-export const EPISODES = EPISODE_TITLES.map((title, i) => ({
-  n: i + 1, title, date: new Date(Date.UTC(2026, 8, 24 + 7 * i, 15, 0)),
+// Where each episode card links, first match wins:
+//   x        → the episode's post on X (paste it in once it's live)
+//   premiere → the premiere event, for anyone who finds the site before the X post
+//   otherwise the Choose Your London Luma page (LUMA_URL)
+const EPISODE_INFO: { title: string; x?: string; premiere?: string }[] = [
+  { title: 'Doomer', premiere: 'https://luma.com/0j8gx7i1?tk=AAKyzV' },
+  { title: 'You’ll Be Fine' },
+  { title: 'The Intern' },
+  { title: 'Departed' },
+  { title: 'Choose Your London' },
+];
+export const EPISODES = EPISODE_INFO.map((e, i) => ({
+  n: i + 1, title: e.title, link: e.x || e.premiere || null,
+  date: new Date(Date.UTC(2026, 8, 24 + 7 * i, 15, 0)),
 }));
 
 export const pad = (n: number) => String(n).padStart(2, '0');
