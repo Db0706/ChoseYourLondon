@@ -52,7 +52,7 @@ export default function Night() {
       </header>
 
       <section className={s.hero}>
-        <img src="/landmarks/big-ben.jpg" alt="Choose Your London over Big Ben and the Houses of Parliament" className={s.heroImg} />
+        <img src="/assets/hero-big-ben-red.jpg" alt="Choose Your London in red over Big Ben and the Houses of Parliament" className={s.heroImg} />
         <div className={s.heroShade} />
         <div className={s.heroBottom}>
           <a href="#intro" className={s.scrollCue}><span className={s.red}>A Superteam UK campaign</span><span>Scroll to make your card ↓</span></a>
