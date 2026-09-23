@@ -5,12 +5,21 @@ import { useEffect, useState } from 'react';
 import { LANDMARKS, type EpisodeInfo, countdown, episodeInfo, fmtDate, pad } from '@/lib/cyl-card';
 import { LUMA_URL, WATCH_URL } from '@/lib/config';
 import { useCardStudio } from '@/lib/useCardStudio';
-import LandmarkPicker from './LandmarkPicker';
 import s from './Night.module.css';
 
 export default function Night() {
   const st = useCardStudio({ landmarkId: 'royal-exchange' });
   const [drawer, setDrawer] = useState(false);
+  // Name flicker while shuffling, like a departure board.
+  const [rolling, setRolling] = useState<string | null>(null);
+  const shuffle = () => {
+    if (rolling) return;
+    let n = 0;
+    const t = setInterval(() => {
+      if (++n > 8) { clearInterval(t); setRolling(null); st.shuffleLandmark(); return; }
+      setRolling(LANDMARKS[Math.floor(Math.random() * LANDMARKS.length)].name);
+    }, 70);
+  };
   const openDrawer = () => setDrawer(true);
   const closeDrawer = () => setDrawer(false);
 
@@ -97,11 +106,19 @@ export default function Night() {
             </div>
 
             <div className={s.stepTight}>
-              <div className={s.stepLabelSplit}><span className={s.stepLabelLeft}><span className={s.red}>02</span>Your landmark</span><span>{LANDMARKS.length} stops</span></div>
-              <LandmarkPicker value={st.landmarkId} onChange={st.pickLandmark} />
+              <div className={s.stepLabelSplit}><span className={s.stepLabelLeft}><span className={s.red}>02</span>Your stop</span><span>{LANDMARKS.length} stops</span></div>
+              <div className={s.stopRow}>
+                <span className={s.stopThumb} style={{ backgroundImage: `url(${st.landmark.thumb})` }} />
+                <span className={s.stopText}>
+                  <span className={s.stopKicker}>London picked</span>
+                  <span className={s.stopName}>{rolling ?? st.landmark.name}</span>
+                  <span className={s.stopArea}>{rolling ? '· · ·' : st.landmark.area}</span>
+                </span>
+                <button type="button" onClick={shuffle} disabled={!!rolling} className={s.ghostBtn}>Shuffle ↻</button>
+              </div>
               <div className={s.photoRow}>
                 <label className={s.photoUpload}>Use your own landmark photo<input type="file" accept="image/*" onChange={st.onPhotoFile} className={s.hidden} /></label>
-                <span>Otherwise it prints as a red card.</span>
+                <span>Or let London pick for you.</span>
               </div>
             </div>
 

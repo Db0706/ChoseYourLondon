@@ -2,28 +2,44 @@
 export const W = 2400, H = 1350;
 const LOGO = '/assets/cyl-logo.png';
 
-export type Landmark = { id: string; name: string; area: string; photo?: string; baked?: boolean };
+export type Landmark = { id: string; name: string; area: string; photo?: string; thumb?: string; baked?: boolean };
 
-// Add a clean (no-text) photo path to any landmark to turn it into a photo card.
-// `baked: true` = the photo already contains the CHOOSE YOUR LONDON wordmark.
+// Each card gets one of these at random. The photos already contain the CHOOSE YOUR LONDON wordmark (`baked`).
 export const LANDMARKS: Landmark[] = [
-  { id: 'royal-exchange', name: 'Royal Exchange', area: 'Bank', photo: '/assets/royal-exchange.jpg', baked: true },
-  { id: 'somerset-house', name: 'Somerset House', area: 'Strand', photo: '/assets/somerset-house.jpg', baked: true },
-  { id: 'big-ben', name: 'Big Ben', area: 'Westminster' },
-  { id: 'tower-bridge', name: 'Tower Bridge', area: 'Southwark' },
-  { id: 'st-pauls', name: "St Paul's", area: 'City of London' },
-  { id: 'the-shard', name: 'The Shard', area: 'London Bridge' },
-  { id: 'london-eye', name: 'London Eye', area: 'South Bank' },
-  { id: 'gherkin', name: 'The Gherkin', area: 'Aldgate' },
-  { id: 'buckingham', name: 'Buckingham Palace', area: "St James's" },
-  { id: 'trafalgar', name: 'Trafalgar Square', area: 'Charing Cross' },
-  { id: 'piccadilly', name: 'Piccadilly Circus', area: 'West End' },
-  { id: 'battersea', name: 'Battersea Power Station', area: 'Nine Elms' },
-  { id: 'camden', name: 'Camden Lock', area: 'Camden' },
-  { id: 'abbey-road', name: 'Abbey Road', area: "St John's Wood" },
-  { id: 'canary-wharf', name: 'Canary Wharf', area: 'Docklands' },
-  { id: 'olympia', name: 'Olympia London', area: 'Kensington · the venue' },
+  { id: 'somerset-house', name: 'Somerset House', area: 'Strand', photo: '/landmarks/somerset-house.jpg', thumb: '/landmarks/thumbs/somerset-house.jpg', baked: true },
+  { id: 'buckingham-palace', name: 'Buckingham Palace', area: "St James's", photo: '/landmarks/buckingham-palace.jpg', thumb: '/landmarks/thumbs/buckingham-palace.jpg', baked: true },
+  { id: 'millennium-bridge', name: 'Millennium Bridge', area: 'Bankside', photo: '/landmarks/millennium-bridge.jpg', thumb: '/landmarks/thumbs/millennium-bridge.jpg', baked: true },
+  { id: 'the-gherkin', name: 'The Gherkin', area: 'City of London', photo: '/landmarks/the-gherkin.jpg', thumb: '/landmarks/thumbs/the-gherkin.jpg', baked: true },
+  { id: 'somerset-house-skate', name: 'Somerset House Skate', area: 'Strand', photo: '/landmarks/somerset-house-skate.jpg', thumb: '/landmarks/thumbs/somerset-house-skate.jpg', baked: true },
+  { id: 'royal-exchange', name: 'Royal Exchange', area: 'Bank', photo: '/landmarks/royal-exchange.jpg', thumb: '/landmarks/thumbs/royal-exchange.jpg', baked: true },
+  { id: 'vauxhall-cross', name: 'Vauxhall Cross', area: 'Vauxhall', photo: '/landmarks/vauxhall-cross.jpg', thumb: '/landmarks/thumbs/vauxhall-cross.jpg', baked: true },
+  { id: 'the-shard', name: 'The Shard', area: 'London Bridge', photo: '/landmarks/the-shard.jpg', thumb: '/landmarks/thumbs/the-shard.jpg', baked: true },
+  { id: 'piccadilly-circus', name: 'Piccadilly Circus', area: 'West End', photo: '/landmarks/piccadilly-circus.jpg', thumb: '/landmarks/thumbs/piccadilly-circus.jpg', baked: true },
+  { id: 'battersea-power-station', name: 'Battersea Power Station', area: 'Nine Elms', photo: '/landmarks/battersea-power-station.jpg', thumb: '/landmarks/thumbs/battersea-power-station.jpg', baked: true },
+  { id: 'royal-albert-hall', name: 'Royal Albert Hall', area: 'Kensington', photo: '/landmarks/royal-albert-hall.jpg', thumb: '/landmarks/thumbs/royal-albert-hall.jpg', baked: true },
+  { id: 'bt-tower', name: 'BT Tower', area: 'Fitzrovia', photo: '/landmarks/bt-tower.jpg', thumb: '/landmarks/thumbs/bt-tower.jpg', baked: true },
+  { id: 'canary-wharf', name: 'Canary Wharf', area: 'Docklands', photo: '/landmarks/canary-wharf.jpg', thumb: '/landmarks/thumbs/canary-wharf.jpg', baked: true },
+  { id: 'trafalgar-square', name: 'Trafalgar Square', area: 'Charing Cross', photo: '/landmarks/trafalgar-square.jpg', thumb: '/landmarks/thumbs/trafalgar-square.jpg', baked: true },
+  { id: 'olympic-park', name: 'Olympic Park', area: 'Stratford', photo: '/landmarks/olympic-park.jpg', thumb: '/landmarks/thumbs/olympic-park.jpg', baked: true },
+  { id: 'natural-history-museum', name: 'Natural History Museum', area: 'South Kensington', photo: '/landmarks/natural-history-museum.jpg', thumb: '/landmarks/thumbs/natural-history-museum.jpg', baked: true },
+  { id: 'the-thames', name: 'The Thames', area: 'Westminster', photo: '/landmarks/the-thames.jpg', thumb: '/landmarks/thumbs/the-thames.jpg', baked: true },
+  { id: 'downing-street', name: 'Downing Street', area: 'Westminster', photo: '/landmarks/downing-street.jpg', thumb: '/landmarks/thumbs/downing-street.jpg', baked: true },
+  { id: 'tower-of-london', name: 'Tower of London', area: 'Tower Hill', photo: '/landmarks/tower-of-london.jpg', thumb: '/landmarks/thumbs/tower-of-london.jpg', baked: true },
+  { id: 'big-ben', name: 'Big Ben', area: 'Westminster', photo: '/landmarks/big-ben.jpg', thumb: '/landmarks/thumbs/big-ben.jpg', baked: true },
+  { id: 'westminster-abbey', name: 'Westminster Abbey', area: 'Westminster', photo: '/landmarks/westminster-abbey.jpg', thumb: '/landmarks/thumbs/westminster-abbey.jpg', baked: true },
+  { id: 'tower-bridge', name: 'Tower Bridge', area: 'Southwark', photo: '/landmarks/tower-bridge.jpg', thumb: '/landmarks/thumbs/tower-bridge.jpg', baked: true },
+  { id: 'marble-arch', name: 'Marble Arch', area: 'Mayfair', photo: '/landmarks/marble-arch.jpg', thumb: '/landmarks/thumbs/marble-arch.jpg', baked: true },
+  { id: 'london-eye', name: 'London Eye', area: 'South Bank', photo: '/landmarks/london-eye.jpg', thumb: '/landmarks/thumbs/london-eye.jpg', baked: true },
+  { id: 'houses-of-parliament', name: 'Houses of Parliament', area: 'Westminster', photo: '/landmarks/houses-of-parliament.jpg', thumb: '/landmarks/thumbs/houses-of-parliament.jpg', baked: true },
+  { id: 'st-pauls', name: "St Paul's Cathedral", area: 'City of London', photo: '/landmarks/st-pauls.jpg', thumb: '/landmarks/thumbs/st-pauls.jpg', baked: true },
+  { id: 'london-streets', name: 'London Streets', area: 'Central London', photo: '/landmarks/london-streets.jpg', thumb: '/landmarks/thumbs/london-streets.jpg', baked: true },
+  { id: 'olympia', name: 'Olympia London', area: 'Kensington · the venue', photo: '/landmarks/olympia.jpg', thumb: '/landmarks/thumbs/olympia.jpg', baked: true },
 ];
+
+export const randomLandmark = (excludeId?: string) => {
+  const pool = LANDMARKS.filter(l => l.id !== excludeId);
+  return pool[Math.floor(Math.random() * pool.length)];
+};
 
 // Pillar-box red, used for the no-photo cards and the avatar ring.
 export const CARD_COLOUR = '#E3120B';
@@ -181,7 +197,7 @@ export async function renderCard(canvas: HTMLCanvasElement, o: CardOptions) {
   fit(ctx, o.name, s => `${s}px ${serif}`, 120, 1080);
   ctx.fillText(o.name, tx, fy + 20);
   ctx.font = `500 29px ${mono}`; spaced(ctx, 4); ctx.globalAlpha = 0.88;
-  ctx.fillText(((o.handle ? '@' + o.handle + '  ·  ' : '') + 'CHOSE ' + lm.name).toUpperCase(), tx + 3, fy + 84);
+  ctx.fillText(((o.handle ? '@' + o.handle + '  ·  ' : '') + 'MY STOP: ' + lm.name).toUpperCase(), tx + 3, fy + 84);
 
   ctx.textAlign = 'right';
   ctx.fillText('SOLANA BREAKPOINT 2026', W - 130, fy + 20);

@@ -1,13 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from 'react';
-import { CARD_COLOUR, LANDMARKS, download as downloadCanvas, loadImage, renderCard } from './cyl-card';
+import { CARD_COLOUR, LANDMARKS, randomLandmark, download as downloadCanvas, loadImage, renderCard } from './cyl-card';
 import { SITE_URL } from './config';
 import { cardFonts } from './fonts';
 
 const cleanHandle = (v: string) => v.replace(/^https?:\/\/(www\.)?(x|twitter)\.com\//i, '').replace(/^@/, '').replace(/[^A-Za-z0-9_]/g, '').slice(0, 15);
 
 type Options = { landmarkId: string; photoStatus?: string };
+
 
 export function useCardStudio({ landmarkId: initialLandmark, photoStatus }: Options) {
   const [handle, setHandle] = useState('');
@@ -20,6 +21,9 @@ export function useCardStudio({ landmarkId: initialLandmark, photoStatus }: Opti
   const [now, setNow] = useState<number | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tok = useRef(0);
+
+  // Pick a random stop once we're in the browser (keeps server and client markup identical).
+  useEffect(() => { setLandmarkId(randomLandmark().id); }, []);
 
   useEffect(() => {
     setNow(Date.now());
@@ -64,7 +68,7 @@ export function useCardStudio({ landmarkId: initialLandmark, photoStatus }: Opti
   const post = () => {
     const who = name.trim() || (handle ? '@' + handle : 'We');
     const url = SITE_URL || location.href.split('#')[0];
-    const text = `${who} chose ${landmark.name}.\n\nChoose your London. See you at Solana Breakpoint, 15–17 Nov.\n\n(make yours: ${url})`;
+    const text = `London picked ${landmark.name} for ${who === 'We' ? 'us' : who}.\n\nChoose your London. See you at Solana Breakpoint, 15–17 Nov.\n\n(make yours: ${url})`;
     window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(text), '_blank', 'noopener');
   };
 
@@ -74,7 +78,7 @@ export function useCardStudio({ landmarkId: initialLandmark, photoStatus }: Opti
     onHandleKey: (e: KeyboardEvent<HTMLInputElement>) => { if (e.key === 'Enter') pull(); },
     onName: (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value.slice(0, 40)),
     pull, onAvatarFile: readInto('avatar'), onPhotoFile: readInto('customPhoto'),
-    pickLandmark: (id: string) => { setLandmarkId(id); setCustomPhoto(null); },
+    shuffleLandmark: () => { setLandmarkId(p => randomLandmark(p).id); setCustomPhoto(null); },
     download, post,
   };
 }
