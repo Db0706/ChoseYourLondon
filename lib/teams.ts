@@ -2,7 +2,7 @@
 // decides which team their spilt beans count for. Anywhere else counts for "Rest of the world".
 export type Team = { id: string; name: string; flag: string; countries: string[] };
 
-// The 25 official chapters listed on superteam.fun (checked Sept 2026).
+// The official chapters listed on superteam.fun (checked Sept 2026), plus Italy.
 export const TEAMS: Team[] = [
   { id: 'uk', name: 'Superteam UK', flag: '🇬🇧', countries: ['GB', 'IM', 'JE', 'GG'] },
   { id: 'ae', name: 'Superteam UAE', flag: '🇦🇪', countries: ['AE'] },
@@ -30,6 +30,8 @@ export const TEAMS: Team[] = [
   { id: 'in', name: 'Superteam India', flag: '🇮🇳', countries: ['IN'] },
   { id: 'au', name: 'Superteam Australia', flag: '🇦🇺', countries: ['AU'] },
   { id: 'ng', name: 'Superteam Nigeria', flag: '🇳🇬', countries: ['NG'] },
+  // Announced 24 Sept 2026, so not on superteam.fun yet.
+  { id: 'it', name: 'Superteam Italy', flag: '🇮🇹', countries: ['IT', 'SM', 'VA'] },
 ];
 
 export const REST_OF_WORLD: Team = { id: 'world', name: 'Rest of the world', flag: '🌍', countries: [] };
