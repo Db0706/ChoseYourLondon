@@ -21,7 +21,7 @@ Copy `.env.example` to `.env.local` and set any of these (all optional):
 | --- | --- | --- |
 | `NEXT_PUBLIC_LUMA_URL` | `https://lu.ma/` | "Get notified" buttons |
 | `NEXT_PUBLIC_WATCH_URL` | `https://x.com/SuperteamUK` | "Watch on X" and released episodes |
-| `NEXT_PUBLIC_SITE_URL` | current page URL | Link in the "Post on X" text, and social preview image URLs |
+| `NEXT_PUBLIC_SITE_URL` | `https://choseyourlondon.com` | Link in the "Post on X" text, and social preview image URLs |
 
 ## Project layout
 
