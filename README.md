@@ -23,6 +23,12 @@ Copy `.env.example` to `.env.local` and set any of these (all optional):
 | `NEXT_PUBLIC_WATCH_URL` | `https://x.com/SuperteamUK` | "Watch on X" and released episodes |
 | `NEXT_PUBLIC_SITE_URL` | `https://choseyourlondon.com` | Link in the "Post on X" text, and social preview image URLs |
 
+## Bean leaderboard
+
+Every click spills a few baked beans. Counts are sent to `/api/beans` and credited to the visitor's Superteam, using the country Vercel detects from their IP (`x-vercel-ip-country`). IP addresses are never stored. The teams are the official chapters on superteam.fun (`lib/teams.ts`); every other country counts as "Rest of the world". The leaderboard opens from the small bean under the logo.
+
+Counts are stored in Upstash Redis. On Vercel, go to **Storage → Create → Upstash for Redis** and connect it to this project; that sets `KV_REST_API_URL` and `KV_REST_API_TOKEN`. Locally, without those, counts live in memory and reset when the server restarts.
+
 ## Project layout
 
 ```

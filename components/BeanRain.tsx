@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { spillBeans } from '@/lib/beanTracker';
 
 // Every click/tap pops a few baked beans out of the cursor. Purely decorative.
 const MIN_BEANS = 3, MAX_BEANS = 6;
@@ -64,6 +65,7 @@ export default function BeanRain() {
           r: 6 + Math.random() * 4, shade: SHADES[(Math.random() * SHADES.length) | 0],
         });
       }
+      spillBeans(n);
       if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); }
     };
     window.addEventListener('pointerdown', onDown, { passive: true });
@@ -75,5 +77,5 @@ export default function BeanRain() {
     };
   }, []);
 
-  return <canvas ref={ref} aria-hidden style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', zIndex: 70, pointerEvents: 'none' }} />;
+  return <canvas ref={ref} aria-hidden style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', zIndex: 90, pointerEvents: 'none' }} />;
 }

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { LANDMARKS, type EpisodeInfo, countdown, episodeInfo, fmtDate, pad } from '@/lib/cyl-card';
 import { LUMA_URL, WATCH_URL } from '@/lib/config';
 import { useCardStudio } from '@/lib/useCardStudio';
+import BeanBoard from './BeanBoard';
 import BeanRain from './BeanRain';
 import s from './Night.module.css';
 
@@ -45,7 +46,10 @@ export default function Night() {
     <div id="top" className={s.root} data-theme="night">
       <BeanRain />
       <header className={s.header}>
-        <a href="#top" aria-label="Superteam UK" className={s.logoSmall}><img src="/assets/stuk-logo-white.png" alt="Superteam UK" className={s.stukLogo} /></a>
+        <div className={s.brand}>
+          <a href="#top" aria-label="Superteam UK" className={s.logoSmall}><img src="/assets/stuk-logo-white.png" alt="Superteam UK" className={s.stukLogo} /></a>
+          <BeanBoard />
+        </div>
         <div className={s.kicker}>Solana Breakpoint · Olympia London · 15–17 Nov 2026</div>
         <nav className={s.nav}>
           <button type="button" onClick={openDrawer} className={s.episodesBtn}>Episodes<span className={s.liveDot} /></button>
