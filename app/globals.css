@@ -1,14 +1,7 @@
 html { scroll-behavior: smooth; }
 body { margin: 0; font-family: var(--sans), system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 
-/* Daylight theme (/) — wrapped in :where() so component styles always win, like the original inline styles */
-body:has([data-theme="day"]) { background: #F3EEE4; color: #16140F; }
-:where([data-theme="day"]) :where(a) { color: #16140F; text-decoration: none; }
-:where([data-theme="day"]) :where(a:hover) { color: #E3120B; }
-:where([data-theme="day"]) ::selection { background: #E3120B; color: #fff; }
-:where([data-theme="day"]) :where(input)::placeholder { color: #A39C90; }
-
-/* Night theme (/night) */
+/* Night theme — wrapped in :where() so component styles always win */
 body:has([data-theme="night"]) { background: #0A0A0C; color: #F3EFE7; }
 :where([data-theme="night"]) :where(a) { color: #F3EFE7; text-decoration: none; }
 :where([data-theme="night"]) :where(a:hover) { color: #F2140F; }

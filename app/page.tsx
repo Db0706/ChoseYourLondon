@@ -1,5 +1,5 @@
-import Daylight from '@/components/Daylight';
+import Night from '@/components/Night';
 
 export default function Home() {
-  return <Daylight />;
+  return <Night />;
 }

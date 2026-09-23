@@ -4,15 +4,6 @@ A Superteam UK campaign site for Solana Breakpoint 2026 (Olympia London, 15–17
 
 Built with [Next.js](https://nextjs.org) (App Router) and TypeScript. The card is drawn in the browser on a `<canvas>`, so uploaded photos never leave the user's device.
 
-## Pages
-
-| Route    | Design   |
-| -------- | -------- |
-| `/`      | Daylight: newspaper masthead, tube-line landmark picker, departures board |
-| `/night` | Night: full-bleed hero photo, card studio, episodes drawer |
-
-To make Night the homepage instead, swap the components in `app/page.tsx` and `app/night/page.tsx`.
-
 ## Getting started
 
 ```bash
@@ -38,11 +29,9 @@ Copy `.env.example` to `.env.local` and set any of these (all optional):
 app/
   layout.tsx        fonts, metadata
   globals.css       per-theme base styles
-  page.tsx          Daylight (/)
-  night/page.tsx    Night (/night)
+  page.tsx          homepage
 components/
-  Daylight.tsx + .module.css
-  Night.tsx + .module.css
+  Night.tsx + .module.css   the whole page
 lib/
   cyl-card.ts       landmarks, colours, episode schedule, canvas card renderer
   useCardStudio.ts  shared card-studio state (handle, name, uploads, download, post)
