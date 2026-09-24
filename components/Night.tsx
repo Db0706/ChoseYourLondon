@@ -165,13 +165,20 @@ export default function Night() {
           <div className={s.epList}>
             {info.list.map(e => (
               <a key={e.n} href={e.link || LUMA_URL} target="_blank" rel="noopener" className={s.ep}>
-                <span className={s.thumb}>
-                  <span className={s.thumbImg} style={{
-                    backgroundImage: e.n % 2 ? 'url(/assets/royal-exchange.jpg)' : 'url(/assets/somerset-house.jpg)',
-                    filter: 'blur(5px) brightness(.4) saturate(.5)', // thumbnails stay hidden
-                  }} />
-                  <span className={s.thumbNum}>EP {pad(e.n)}</span>
-                </span>
+                {e.out && e.thumb ? (
+                  <span className={s.thumb}>
+                    <span className={s.thumbImg} style={{ backgroundImage: `url(${e.thumb})` }} />
+                    <span className={s.thumbBadge}>EP {pad(e.n)}</span>
+                  </span>
+                ) : (
+                  <span className={s.thumb}>
+                    <span className={s.thumbImg} style={{
+                      backgroundImage: e.n % 2 ? 'url(/assets/royal-exchange.jpg)' : 'url(/assets/somerset-house.jpg)',
+                      filter: 'blur(5px) brightness(.4) saturate(.5)', // hidden until the episode is out
+                    }} />
+                    <span className={s.thumbNum}>EP {pad(e.n)}</span>
+                  </span>
+                )}
                 <span className={s.epText}>
                   <span className={s.epTitle}>{e.title}</span>
                   <span className={s.epDate}>{e.dateLabel}</span>
