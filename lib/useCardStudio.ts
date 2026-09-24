@@ -63,7 +63,7 @@ export function useCardStudio() {
     if (!landmark) return;
     const who = name.trim() || (handle ? '@' + handle : 'We');
     const url = SITE_URL || location.href.split('#')[0];
-    const text = `London picked ${landmark.name} for ${who === 'We' ? 'us' : who}.\n\nChoose your London. See you at Solana Breakpoint, 15–17 Nov.\n\n(make yours: ${url})`;
+    const text = `${who} chose ${landmark.name}.\n\nChoose your London. See you at Solana Breakpoint, 15–17 Nov.\n\n(make yours: ${url})`;
     window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(text), '_blank', 'noopener');
   };
 

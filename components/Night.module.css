@@ -90,7 +90,7 @@
 @keyframes choosePulse { 0% { box-shadow: 0 0 0 0 rgba(242, 20, 15, .55); } 100% { box-shadow: 0 0 0 14px rgba(242, 20, 15, 0); } }
 @media (prefers-reduced-motion: reduce) { .chooseBtn { animation: none; } }
 .primary:disabled, .secondary:disabled { opacity: .35; cursor: not-allowed; }
-.ticketLink { color: #F2140F; text-decoration: underline; text-underline-offset: 3px; }
+.ticketLink { color: #B57BFF; text-decoration: underline; text-underline-offset: 3px; }
 .ticketLink:hover { color: #F3EFE7; }
 .ghostBtn:disabled { opacity: .6; cursor: default; }
 

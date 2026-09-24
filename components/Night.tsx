@@ -73,11 +73,7 @@ export default function Night() {
       <section id="intro" className={s.intro}>
         <h1 className={s.h1}>Everyone’s coming to London. <em>Pick your corner of it.</em></h1>
         <div className={s.introSide}>
-          <p className={s.introText}>London picks your stop, you add your community, then download the card. Then post it and tag the friend who still hasn’t booked.</p>
-          <div className={s.btnRow}>
-            <a href="#studio" className={s.primary}>Make your card</a>
-            <button type="button" onClick={openDrawer} className={s.secondary}>Watch the series</button>
-          </div>
+          <p className={s.introText}>Add your name and community, hit Choose Innit to choose your stop, then download your card. Post it and tag the friend who still hasn’t booked.</p>
         </div>
       </section>
 
@@ -115,9 +111,9 @@ export default function Night() {
                   ? <span className={s.stopThumb} style={{ backgroundImage: `url(${st.landmark.thumb})` }} />
                   : <span className={`${s.stopThumb} ${s.stopMystery}`}>?</span>}
                 <span className={s.stopText}>
-                  <span className={s.stopKicker}>{st.landmark ? 'London picked' : 'Mystery stop'}</span>
+                  <span className={s.stopKicker}>{st.landmark ? 'You chose' : 'Mystery stop'}</span>
                   <span className={s.stopName}>{rolling ?? st.landmark?.name ?? '???'}</span>
-                  <span className={s.stopArea}>{rolling ? '· · ·' : st.landmark?.area ?? 'Let London choose for you'}</span>
+                  <span className={s.stopArea}>{rolling ? '· · ·' : st.landmark?.area ?? 'Choose Innit to choose yours'}</span>
                 </span>
                 <button type="button" onClick={shuffle} disabled={!!rolling} className={st.landmark ? s.ghostBtn : s.chooseBtn}>{st.landmark ? 'Shuffle Innit ↻' : 'Choose Innit'}</button>
               </div>
@@ -137,7 +133,7 @@ export default function Night() {
             </div>
             <p className={s.note}>{st.landmark
               ? 'Preview. The download is the full 2400 × 1350 image. Your photo never leaves your browser.'
-              : 'Hit Choose Innit to find out where London sends you, then download your card.'}</p>
+              : 'Hit Choose Innit to choose your stop, then download your card.'}</p>
           </div>
         </div>
       </section>
@@ -145,7 +141,7 @@ export default function Night() {
       <footer className={s.footer}>
         <div className={s.logoBig}><img src="/assets/cyl-logo.png" alt="Choose Your London" className={s.logoImg} /></div>
         <div className={s.footerRow}>
-          <span>A Superteam UK campaign for Solana Breakpoint 2026 · <a href="https://dub.sh/chooselondoninnit" target="_blank" rel="noopener" className={s.ticketLink}>Get your tickets</a></span>
+          <span>A Superteam UK campaign for Solana Breakpoint 2026 · <a href="https://dub.sh/chooselondoninnit" target="_blank" rel="noopener" className={s.ticketLink}>Are you dumb fam?</a></span>
           <span>Built by <a href="https://x.com/deandev10" target="_blank" rel="noopener" className={s.footerLink}>@deandev10</a> for <a href="https://x.com/SuperteamUK" target="_blank" rel="noopener" className={s.footerLink}>Superteam UK</a></span>
         </div>
       </footer>
