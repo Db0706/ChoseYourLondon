@@ -20,7 +20,7 @@ Copy `.env.example` to `.env.local` and set any of these (all optional):
 | Variable | Default | Used for |
 | --- | --- | --- |
 | `NEXT_PUBLIC_LUMA_URL` | `https://luma.com/chooseyourlondon` | Episodes without their own link |
-| `NEXT_PUBLIC_SITE_URL` | `https://choseyourlondon.com` | Link in the "Post on X" text, and social preview image URLs |
+| `NEXT_PUBLIC_SITE_URL` | `https://chooseyourlondon.com` | Link in the "Post on X" text, and social preview image URLs |
 
 ## Bean leaderboard
 
