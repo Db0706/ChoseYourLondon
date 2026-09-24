@@ -49,9 +49,9 @@ export function useCardStudio() {
     const h = handle;
     if (!h) { setStatus('Type a handle first.'); return; }
     setStatus('Pulling from X…');
-    const src = `https://unavatar.io/x/${h}?fallback=false`;
+    const src = `/api/avatar?h=${encodeURIComponent(h)}`;
     try {
-      await loadImage(src, true);
+      await loadImage(src);
       setAvatar(src); setName(p => p || h); setStatus(`Got @${h}’s photo.`);
     } catch {
       setStatus('Couldn’t fetch that one. Upload a logo instead.');
