@@ -29,8 +29,8 @@
 /* Portrait screens: show the whole photo so the baked-in wordmark isn't cropped */
 @media (max-aspect-ratio: 1/1) {
   .hero { height: auto; min-height: 0; padding-top: 76px; }
-  .heroImg { position: relative; display: block; left: 0; top: 0; width: 100%; height: auto; aspect-ratio: 1672/941; }
-  .heroShade { top: 76px; bottom: auto; height: calc(100vw * 941 / 1672); background: linear-gradient(180deg, rgba(10, 10, 12, 0) 70%, #0A0A0C 100%); }
+  .heroImg { position: relative; display: block; left: 0; top: 0; width: 100%; height: auto; aspect-ratio: 3200/1786; }
+  .heroShade { top: 76px; bottom: auto; height: calc(100vw * 1786 / 3200); background: linear-gradient(180deg, rgba(10, 10, 12, 0) 70%, #0A0A0C 100%); }
   .heroBottom { position: relative; padding-top: 28px; }
 }
 .bpTickets { padding: 14px 22px; border-radius: 999px; background: #9945FF; color: #fff; font: 600 13px var(--sans), sans-serif; letter-spacing: .06em; text-transform: uppercase; box-shadow: 0 12px 30px -10px rgba(153, 69, 255, .7); transition: background .2s, transform .2s; }
