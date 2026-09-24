@@ -33,7 +33,6 @@
   .heroShade { top: 76px; bottom: auto; height: calc(100vw * 941 / 1672); background: linear-gradient(180deg, rgba(10, 10, 12, 0) 70%, #0A0A0C 100%); }
   .heroBottom { position: relative; padding-top: 28px; }
 }
-.scrollCue { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; font: 500 11px var(--mono), monospace; letter-spacing: .18em; text-transform: uppercase; color: #D6D1C8; }
 .bpTickets { padding: 14px 22px; border-radius: 999px; background: #9945FF; color: #fff; font: 600 13px var(--sans), sans-serif; letter-spacing: .06em; text-transform: uppercase; box-shadow: 0 12px 30px -10px rgba(153, 69, 255, .7); transition: background .2s, transform .2s; }
 .bpTickets:hover { background: #B57BFF; color: #fff; transform: translateY(-1px); }
 .red { color: #F2140F; }
