@@ -152,7 +152,7 @@ export async function renderCard(canvas: HTMLCanvasElement, o: CardOptions) {
   let photo: HTMLImageElement | null = null, avatar: HTMLImageElement | null = null;
   if (photoSrc) { try { photo = await loadImage(photoSrc); } catch {} }
   if (o.avatar) { try { avatar = await loadImage(o.avatar, /^https?:/.test(o.avatar)); } catch {} }
-  if (o.isCurrent && !o.isCurrent()) return;
+  if (o.isCurrent && !o.isCurrent()) return false;
 
   if (canvas.width !== W) canvas.width = W;
   if (canvas.height !== H) canvas.height = H;
@@ -229,15 +229,7 @@ export async function renderCard(canvas: HTMLCanvasElement, o: CardOptions) {
   ctx.fillText('SOLANA BREAKPOINT 2026', W - 130, company ? yCompany : yName);
   ctx.fillText('OLYMPIA LONDON · 15–17 NOV', W - 130, ySub);
   ctx.restore();
-}
-
-export function download(canvas: HTMLCanvasElement, filename: string) {
-  canvas.toBlob(b => {
-    if (!b) return;
-    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = filename;
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-  }, 'image/png');
+  return true;
 }
 
 export type EpisodeInfo = ReturnType<typeof episodeInfo>;

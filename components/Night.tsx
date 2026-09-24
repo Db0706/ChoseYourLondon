@@ -61,7 +61,7 @@ export default function Night() {
         <img src="/assets/hero-big-ben-red.jpg" alt="Choose Your London in red over Big Ben and the Houses of Parliament" className={s.heroImg} />
         <div className={s.heroShade} />
         <div className={s.heroBottom}>
-          <a href="https://luma.com/breakpoint2026" target="_blank" rel="noopener" className={s.bpTickets}>Get your tickets to Breakpoint 2026 ↗</a>
+          <a href="https://luma.com/breakpoint2026?utm_source=chooseyourlondon&utm_medium=hero" target="_blank" rel="noopener" className={s.bpTickets}>Get your tickets to Breakpoint 2026 ↗</a>
           <button type="button" onClick={openDrawer} className={s.heroChip}>
             <span className={s.chipTitle}><span className={s.dot} />{heroChipTitle}</span>
             <span className={s.chipCount}>{count}</span>
@@ -141,7 +141,7 @@ export default function Night() {
       <footer className={s.footer}>
         <div className={s.logoBig}><img src="/assets/cyl-logo.png" alt="Choose Your London" className={s.logoImg} /></div>
         <div className={s.footerRow}>
-          <span>A Superteam UK campaign for Solana Breakpoint 2026 · <a href="https://dub.sh/chooselondoninnit" target="_blank" rel="noopener" className={s.ticketLink}>Are you dumb fam?</a></span>
+          <span>A Superteam UK campaign for Solana Breakpoint 2026 · <a href="https://luma.com/breakpoint2026?utm_source=chooseyourlondon&utm_medium=footer" target="_blank" rel="noopener" className={s.ticketLink}>Are you dumb fam?</a></span>
           <span>Built by <a href="https://x.com/deandev10" target="_blank" rel="noopener" className={s.footerLink}>@deandev10</a> for <a href="https://x.com/SuperteamUK" target="_blank" rel="noopener" className={s.footerLink}>Superteam UK</a></span>
         </div>
       </footer>
@@ -185,6 +185,16 @@ export default function Night() {
           </div>
         </div>
       </aside>
+
+      {st.saveUrl && (
+        <div className={s.saveOverlay} onClick={st.closeSave}>
+          <div className={s.saveBox} onClick={e => e.stopPropagation()}>
+            <img src={st.saveUrl} alt="Your Choose Your London card" className={s.saveImg} />
+            <p className={s.saveHint}>Press and hold the card, then tap <strong>Save image</strong>.</p>
+            <button type="button" onClick={st.closeSave} className={s.secondary}>Done</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

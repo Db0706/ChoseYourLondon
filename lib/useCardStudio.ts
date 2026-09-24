@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from 'react';
-import { CARD_COLOUR, LANDMARKS, MYSTERY, MYSTERY_COLOUR, randomLandmark, download as downloadCanvas, loadImage, renderCard } from './cyl-card';
+import { CARD_COLOUR, LANDMARKS, MYSTERY, MYSTERY_COLOUR, randomLandmark, loadImage, renderCard } from './cyl-card';
 import { SITE_URL } from './config';
 import { cardFonts } from './fonts';
 
@@ -22,6 +22,9 @@ export function useCardStudio() {
   const [now, setNow] = useState<number | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tok = useRef(0);
+  const blob = useRef<Blob | null>(null);
+  // Set when a phone can't open the share sheet: the card is shown on the page to press-and-hold.
+  const [saveUrl, setSaveUrl] = useState<string | null>(null);
 
   useEffect(() => {
     setNow(Date.now());
@@ -35,7 +38,11 @@ export function useCardStudio() {
   useEffect(() => {
     const c = canvasRef.current; if (!c) return;
     const t = ++tok.current;
-    renderCard(c, { landmark: landmark || MYSTERY, colour: landmark ? CARD_COLOUR : MYSTERY_COLOUR, name: cardName, handle, company, avatar: avatar || DEFAULT_PFP, fonts: cardFonts, isCurrent: () => t === tok.current });
+    blob.current = null;
+    renderCard(c, { landmark: landmark || MYSTERY, colour: landmark ? CARD_COLOUR : MYSTERY_COLOUR, name: cardName, handle, company, avatar: avatar || DEFAULT_PFP, fonts: cardFonts, isCurrent: () => t === tok.current })
+      // Keep a ready-made PNG so a tap on Download can open the share sheet straight away
+      // (phones only allow that while the tap is still "fresh").
+      .then(drawn => { if (drawn && landmark) c.toBlob(b => { if (t === tok.current) blob.current = b; }, 'image/png'); });
   }, [landmark, cardName, handle, company, avatar]);
 
   const pull = useCallback(async () => {
@@ -58,7 +65,29 @@ export function useCardStudio() {
     r.readAsDataURL(f); e.target.value = '';
   };
 
-  const download = () => { if (landmark && canvasRef.current) downloadCanvas(canvasRef.current, `choose-your-london-${landmark.id}.png`); };
+  // Desktop: normal file download. Phones and in-app browsers (Telegram, X, Instagram…) often
+  // ignore that and open the image as a new page, so there we use the share sheet ("Save Image"),
+  // or show the image on this page to press-and-hold, instead of sending people away.
+  const download = async () => {
+    const c = canvasRef.current; if (!landmark || !c) return;
+    const filename = `choose-your-london-${landmark.id}.png`;
+    const png = blob.current || await new Promise<Blob | null>(res => c.toBlob(res, 'image/png'));
+    if (!png) return;
+    const touch = window.matchMedia('(pointer: coarse)').matches;
+    if (touch) {
+      const file = new File([png], filename, { type: 'image/png' });
+      if (navigator.canShare?.({ files: [file] })) {
+        try { await navigator.share({ files: [file] }); return; }
+        catch (e) { if ((e as Error).name === 'AbortError') return; }
+      }
+      setSaveUrl(URL.createObjectURL(png));
+      return;
+    }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(png); a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  };
+  const closeSave = () => { if (saveUrl) URL.revokeObjectURL(saveUrl); setSaveUrl(null); };
   const post = () => {
     if (!landmark) return;
     const who = name.trim() || (handle ? '@' + handle : 'We');
@@ -75,6 +104,6 @@ export function useCardStudio() {
     company, onCompany: (e: ChangeEvent<HTMLInputElement>) => setCompany(e.target.value.slice(0, 50)),
     pull, onAvatarFile,
     shuffleLandmark: () => setLandmarkId(p => randomLandmark(p).id),
-    download, post,
+    download, post, saveUrl, closeSave,
   };
 }
