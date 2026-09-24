@@ -1,18 +1,11 @@
-import { createHash } from 'node:crypto';
 import { addBeans, allowBeans, readBeans } from '@/lib/beanStore';
 import { BEANS_PER_MINUTE, MAX_PER_REQUEST } from '@/lib/beanLimits';
+import { visitorOf } from '@/lib/visitor';
 import { REST_OF_WORLD, TEAMS, teamById, teamForCountry } from '@/lib/teams';
 
 
 // Vercel adds the visitor's country (from their IP) to every request. We only keep the team it maps to.
 const countryOf = (req: Request) => req.headers.get('x-vercel-ip-country');
-
-// Rate limiting needs to tell visitors apart without keeping their IP: hash it with a salt.
-const SALT = process.env.BEAN_SALT || 'choose-your-london-beans';
-const visitorOf = (req: Request) => {
-  const ip = req.headers.get('x-real-ip') || req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
-  return createHash('sha256').update(SALT + ip).digest('hex').slice(0, 24);
-};
 
 export async function GET(req: Request) {
   const { total, teams } = await readBeans();

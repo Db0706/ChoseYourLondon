@@ -43,6 +43,22 @@ export async function allowBeans(who: string, n: number, perMinute: number) {
 
 const memoryLimits = new Map<string, number>();
 
+// Counts one use of `what` for visitor `who` today; true while they're within `perDay`.
+export async function withinDailyLimit(what: string, who: string, perDay: number) {
+  const key = `limit:${what}:${who}:${new Date().toISOString().slice(0, 10)}`;
+  let used: number;
+  if (redis) {
+    const p = redis.pipeline();
+    p.incr(key);
+    p.expire(key, 60 * 60 * 26);
+    used = Number((await p.exec())[0]);
+  } else {
+    used = (memoryLimits.get(key) || 0) + 1;
+    memoryLimits.set(key, used);
+  }
+  return used <= perDay;
+}
+
 export async function readBeans(): Promise<{ total: number; teams: Record<string, number> }> {
   if (redis) {
     const [total, teams] = await Promise.all([redis.get<number>(TOTAL), redis.hgetall<Record<string, number>>(TEAMS)]);

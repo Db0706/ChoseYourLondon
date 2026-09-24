@@ -1,6 +1,11 @@
 // Fetches an X profile photo server-side so "Pull from X" doesn't depend on each visitor's
 // own rate limit with a third-party service. Responses are cached at Vercel's edge per handle.
+import { withinDailyLimit } from '@/lib/beanStore';
+import { visitorOf } from '@/lib/visitor';
+
 const HANDLE = /^[A-Za-z0-9_]{1,15}$/;
+// Cached handles never reach this code, so this only counts fresh lookups. Real people won't get close.
+const PULLS_PER_DAY = 1000;
 const TIMEOUT = 6000;
 
 async function fromFxTwitter(h: string) {
@@ -20,6 +25,9 @@ async function fetchImage(url: string) {
 export async function GET(req: Request) {
   const h = new URL(req.url).searchParams.get('h') || '';
   if (!HANDLE.test(h)) return new Response('Bad handle', { status: 400 });
+  if (!(await withinDailyLimit('avatar', visitorOf(req), PULLS_PER_DAY))) {
+    return new Response('Too many lookups today', { status: 429, headers: { 'Cache-Control': 'no-store' } });
+  }
 
   let img = null;
   try { const url = await fromFxTwitter(h); if (url) img = await fetchImage(url); } catch {}
