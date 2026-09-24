@@ -54,7 +54,7 @@ export const CARD_COLOUR = '#E3120B';
 //   premiere → the premiere event, for anyone who finds the site before the X post
 //   otherwise the Choose Your London Luma page (LUMA_URL)
 const EPISODE_INFO: { title: string; x?: string; premiere?: string }[] = [
-  { title: 'Doomer', premiere: 'https://luma.com/0j8gx7i1?tk=AAKyzV' },
+  { title: 'Doomer', x: 'https://x.com/SuperteamUK/status/2103137851642630246?s=20', premiere: 'https://luma.com/0j8gx7i1?tk=AAKyzV' },
   { title: 'You’ll Be Fine' },
   { title: 'The Intern' },
   { title: 'Departed' },
