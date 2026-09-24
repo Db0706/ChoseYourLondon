@@ -25,6 +25,9 @@ export default function Night() {
   const openDrawer = () => setDrawer(true);
   const closeDrawer = () => setDrawer(false);
 
+  // Private visitor count (see /api/stats); no cookies, nothing personal stored.
+  useEffect(() => { fetch('/api/visit', { method: 'POST', keepalive: true }).catch(() => {}); }, []);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setDrawer(false); };
     window.addEventListener('keydown', onKey);

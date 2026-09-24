@@ -66,3 +66,36 @@ export async function readBeans(): Promise<{ total: number; teams: Record<string
   }
   return { total: memory.total, teams: Object.fromEntries(memory.teams) };
 }
+
+// ---- Visitor counting (no cookies, no stored IPs) ----
+// Views are a plain counter per day. Unique visitors use a HyperLogLog of hashed IPs:
+// it can estimate how many distinct visitors there were, but can't list or reveal them.
+const day = (d = new Date()) => d.toISOString().slice(0, 10);
+const memoryVisits = { views: new Map<string, number>(), uniq: new Map<string, Set<string>>() };
+
+export async function recordVisit(who: string) {
+  const d = day();
+  if (redis) {
+    const p = redis.pipeline();
+    p.incr(`visits:views:${d}`);
+    p.incr('visits:views:all');
+    p.pfadd(`visits:uniq:${d}`, who);
+    p.pfadd('visits:uniq:all', who);
+    await p.exec();
+    return;
+  }
+  for (const k of [d, 'all']) {
+    memoryVisits.views.set(k, (memoryVisits.views.get(k) || 0) + 1);
+    if (!memoryVisits.uniq.has(k)) memoryVisits.uniq.set(k, new Set());
+    memoryVisits.uniq.get(k)!.add(who);
+  }
+}
+
+export async function readVisits(days = 14) {
+  const keys = Array.from({ length: days }, (_, i) => day(new Date(Date.now() - i * 86_400_000)));
+  const one = async (k: string) => redis
+    ? { views: Number(await redis.get(`visits:views:${k}`)) || 0, visitors: await redis.pfcount(`visits:uniq:${k}`) }
+    : { views: memoryVisits.views.get(k) || 0, visitors: memoryVisits.uniq.get(k)?.size || 0 };
+  const [all, ...perDay] = await Promise.all([one('all'), ...keys.map(one)]);
+  return { allTime: all, days: keys.map((date, i) => ({ date, ...perDay[i] })) };
+}
