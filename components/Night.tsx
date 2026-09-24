@@ -61,7 +61,10 @@ export default function Night() {
         <img src="/assets/hero-big-ben-red.jpg" alt="Choose Your London in red over Big Ben and the Houses of Parliament" className={s.heroImg} />
         <div className={s.heroShade} />
         <div className={s.heroBottom}>
-          <a href="#intro" className={s.scrollCue}><span className={s.red}>A Superteam UK campaign</span><span>Scroll to make your card ↓</span></a>
+          <div className={s.scrollCue}>
+            <span className={s.red}>A Superteam UK campaign</span>
+            <a href="https://luma.com/breakpoint2026" target="_blank" rel="noopener" className={s.bpTickets}>Get your tickets to Breakpoint 2026 ↗</a>
+          </div>
           <button type="button" onClick={openDrawer} className={s.heroChip}>
             <span className={s.chipTitle}><span className={s.dot} />{heroChipTitle}</span>
             <span className={s.chipCount}>{count}</span>
