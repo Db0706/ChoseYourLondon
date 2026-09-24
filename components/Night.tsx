@@ -71,9 +71,9 @@ export default function Night() {
       </section>
 
       <section id="intro" className={s.intro}>
-        <h1 className={s.h1}>Everyone’s coming to London. <em>Pick your corner of it.</em></h1>
+        <h1 className={s.h1}>Everyone’s coming to London. <em>Find your corner of it.</em></h1>
         <div className={s.introSide}>
-          <p className={s.introText}>Add your name and community, hit Choose Innit to choose your stop, then download your card. Post it and tag the friend who still hasn’t booked.</p>
+          <p className={s.introText}>Add your details and we’ll match you with a London stop. Download your card, post it, and tag the friend who still hasn’t booked.</p>
         </div>
       </section>
 
