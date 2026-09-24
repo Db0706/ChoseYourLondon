@@ -1,5 +1,5 @@
 html { scroll-behavior: smooth; }
-body { margin: 0; font-family: var(--sans), system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0; font-family: var(--serif), Georgia, serif; -webkit-font-smoothing: antialiased; }
 
 /* Night theme — wrapped in :where() so component styles always win */
 body:has([data-theme="night"]) { background: #0A0A0C; color: #F3EFE7; }
