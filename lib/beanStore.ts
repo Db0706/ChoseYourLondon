@@ -24,6 +24,25 @@ export async function addBeans(teamId: string, n: number) {
   memory.teams.set(teamId, (memory.teams.get(teamId) || 0) + n);
 }
 
+// Per-person allowance: returns how many of `n` beans still fit in this minute.
+// `who` is a salted hash of the visitor's IP; the key expires after two minutes.
+export async function allowBeans(who: string, n: number, perMinute: number) {
+  const key = `beans:rl:${who}:${Math.floor(Date.now() / 60_000)}`;
+  let used: number;
+  if (redis) {
+    const p = redis.pipeline();
+    p.incrby(key, n);
+    p.expire(key, 120);
+    used = Number((await p.exec())[0]);
+  } else {
+    used = (memoryLimits.get(key) || 0) + n;
+    memoryLimits.set(key, used);
+  }
+  return Math.max(0, Math.min(n, perMinute - (used - n)));
+}
+
+const memoryLimits = new Map<string, number>();
+
 export async function readBeans(): Promise<{ total: number; teams: Record<string, number> }> {
   if (redis) {
     const [total, teams] = await Promise.all([redis.get<number>(TOTAL), redis.hgetall<Record<string, number>>(TEAMS)]);

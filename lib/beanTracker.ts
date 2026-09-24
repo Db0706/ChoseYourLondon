@@ -1,8 +1,12 @@
 'use client';
 
+import { BEANS_PER_MINUTE, MAX_PER_REQUEST } from './beanLimits';
+
 // Counts beans spilt in this browser and sends them to /api/beans in small batches.
+// Beans over the per-minute allowance are still drawn on screen, they just don't count.
 const FLUSH_MS = 3000;
-const MINE_KEY = 'cyl-beans-mine';
+const MINE_KEY = 'cyl-beans-mine-v2'; // v2: resets the old uncapped personal counts
+let windowStart = 0, usedThisMinute = 0;
 
 let pending = 0;
 let timer: ReturnType<typeof setTimeout> | null = null;
@@ -24,11 +28,17 @@ if (typeof window !== 'undefined') {
 }
 
 export function spillBeans(n: number) {
+  const now = Date.now();
+  if (now - windowStart >= 60_000) { windowStart = now; usedThisMinute = 0; }
+  n = Math.min(n, BEANS_PER_MINUTE - usedThisMinute);
+  if (n <= 0) return;
+  usedThisMinute += n;
   pending += n;
   mine += n;
   try { localStorage.setItem(MINE_KEY, String(mine)); } catch {}
   listeners.forEach(l => l(mine));
-  if (!timer) timer = setTimeout(flush, FLUSH_MS);
+  if (pending >= MAX_PER_REQUEST) flushBeans();
+  else if (!timer) timer = setTimeout(flush, FLUSH_MS);
 }
 
 export function flushBeans() { if (timer) clearTimeout(timer); flush(); }

@@ -1,12 +1,18 @@
-import { addBeans, readBeans } from '@/lib/beanStore';
+import { createHash } from 'node:crypto';
+import { addBeans, allowBeans, readBeans } from '@/lib/beanStore';
+import { BEANS_PER_MINUTE, MAX_PER_REQUEST } from '@/lib/beanLimits';
 import { REST_OF_WORLD, TEAMS, teamById, teamForCountry } from '@/lib/teams';
 
-// Each click spills at most 6 beans and the client batches every few seconds,
-// so anything bigger than this in one request is someone poking the API.
-const MAX_PER_REQUEST = 150;
 
 // Vercel adds the visitor's country (from their IP) to every request. We only keep the team it maps to.
 const countryOf = (req: Request) => req.headers.get('x-vercel-ip-country');
+
+// Rate limiting needs to tell visitors apart without keeping their IP: hash it with a salt.
+const SALT = process.env.BEAN_SALT || 'choose-your-london-beans';
+const visitorOf = (req: Request) => {
+  const ip = req.headers.get('x-real-ip') || req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
+  return createHash('sha256').update(SALT + ip).digest('hex').slice(0, 24);
+};
 
 export async function GET(req: Request) {
   const { total, teams } = await readBeans();
@@ -23,6 +29,7 @@ export async function POST(req: Request) {
   if (!Number.isFinite(n) || n <= 0) return Response.json({ ok: false }, { status: 400 });
   const team = teamForCountry(countryOf(req));
   if (!teamById(team.id)) return Response.json({ ok: false }, { status: 400 });
-  await addBeans(team.id, Math.min(n, MAX_PER_REQUEST));
-  return Response.json({ ok: true });
+  const accepted = await allowBeans(visitorOf(req), Math.min(n, MAX_PER_REQUEST), BEANS_PER_MINUTE);
+  if (accepted > 0) await addBeans(team.id, accepted);
+  return Response.json({ ok: true, accepted });
 }
