@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
+import { withBotId } from "botid/next/config";
 
 const nextConfig: NextConfig = {};
 
-export default nextConfig;
+// BotID: Vercel's invisible bot check, used to protect the bean counter.
+export default withBotId(nextConfig);

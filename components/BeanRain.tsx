@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { spillBeans } from '@/lib/beanTracker';
+import { isHumanTap, spillBeans } from '@/lib/beanTracker';
 
 // Every click/tap pops a few baked beans out of the cursor. Purely decorative.
 const MIN_BEANS = 3, MAX_BEANS = 6;
@@ -65,7 +65,9 @@ export default function BeanRain() {
           r: 6 + Math.random() * 4, shade: SHADES[(Math.random() * SHADES.length) | 0],
         });
       }
-      spillBeans(n);
+      // Beans always fall, but only genuine, human-rhythm taps count on the leaderboard
+      // (clicks faked by code have isTrusted = false).
+      if (e.isTrusted && isHumanTap()) spillBeans(n);
       if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); }
     };
     window.addEventListener('pointerdown', onDown, { passive: true });

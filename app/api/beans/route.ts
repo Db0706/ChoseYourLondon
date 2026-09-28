@@ -1,3 +1,4 @@
+import { checkBotId } from 'botid/server';
 import { addBeans, allowBeans, readBeans } from '@/lib/beanStore';
 import { BEANS_PER_MINUTE, MAX_PER_REQUEST } from '@/lib/beanLimits';
 import { visitorOf } from '@/lib/visitor';
@@ -20,6 +21,8 @@ export async function POST(req: Request) {
   let n = 0;
   try { n = Math.floor(Number((await req.json()).n)); } catch {}
   if (!Number.isFinite(n) || n <= 0) return Response.json({ ok: false }, { status: 400 });
+  // Bots get a normal-looking reply but their beans aren't counted.
+  if ((await checkBotId()).isBot) return Response.json({ ok: true, accepted: 0 });
   const team = teamForCountry(countryOf(req));
   if (!teamById(team.id)) return Response.json({ ok: false }, { status: 400 });
   const accepted = await allowBeans(visitorOf(req), Math.min(n, MAX_PER_REQUEST), BEANS_PER_MINUTE);
