@@ -58,7 +58,7 @@ export const CARD_COLOUR = '#E3120B';
 const EPISODE_INFO: { title: string; x?: string; premiere?: string; thumb?: string }[] = [
   { title: 'Doomer', thumb: '/episodes/ep01-doomer.jpg', x: 'https://x.com/SuperteamUK/status/2103137851642630246?s=20', premiere: 'https://luma.com/0j8gx7i1?tk=AAKyzV' },
   { title: 'You’ll Be Fine', thumb: '/episodes/ep02-youll-be-fine.jpg', x: 'https://x.com/SuperteamUK/status/2105674135795892702?s=20' },
-  { title: 'The Intern' },
+  { title: 'The Intern', thumb: '/episodes/ep03-the-intern.jpg', x: 'https://x.com/SuperteamUK/status/2108221860135551231?s=20' },
   { title: 'Departed' },
   { title: 'Choose Your London' },
 ];
