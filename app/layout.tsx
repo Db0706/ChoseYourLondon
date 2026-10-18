@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { SITE_URL } from '@/lib/config';
-import { mono, sans, serif } from '@/lib/fonts';
+import { mono, serif } from '@/lib/fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export const viewport: Viewport = { width: 'device-width', initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-GB" className={`${serif.variable} ${mono.variable} ${sans.variable}`}>
+    <html lang="en-GB" className={`${serif.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );

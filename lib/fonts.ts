@@ -1,8 +1,21 @@
-import { Hanken_Grotesk, Instrument_Serif, JetBrains_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 
-export const serif = Instrument_Serif({ subsets: ['latin'], weight: '400', style: ['normal', 'italic'], variable: '--serif', display: 'swap' });
-export const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'], variable: '--mono', display: 'swap' });
-export const sans = Hanken_Grotesk({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--sans', display: 'swap' });
+// Fonts are self-hosted (files in ./font-files, OFL licensed) so builds never depend on
+// downloading them from Google Fonts at build time.
+export const serif = localFont({
+  src: [
+    { path: './font-files/instrument-serif-latin-400-normal.woff2', weight: '400', style: 'normal' },
+    { path: './font-files/instrument-serif-latin-400-italic.woff2', weight: '400', style: 'italic' },
+  ],
+  variable: '--serif',
+  display: 'swap',
+});
+export const mono = localFont({
+  src: './font-files/jetbrains-mono-latin-wght-normal.woff2',
+  weight: '100 800',
+  variable: '--mono',
+  display: 'swap',
+});
 
 // Font-family strings the <canvas> card renderer uses.
 export const cardFonts = { serif: serif.style.fontFamily, mono: mono.style.fontFamily };
