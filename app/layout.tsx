@@ -8,12 +8,12 @@ export const metadata: Metadata = {
   title: 'Choose Your London',
   alternates: { canonical: '/' },
   description: 'Pick your headline, make your Daily Bean front page, and see you at Solana Breakpoint 2026 · Olympia London, 15–17 November. A Superteam UK campaign.',
+  // No preview image: people attach their own Daily Bean card when they post the link.
   openGraph: {
     title: 'Choose Your London',
-    description: 'Pick your corner of London for Solana Breakpoint 2026. A Superteam UK campaign.',
-    images: ['/assets/royal-exchange.jpg'],
+    description: 'Make your Daily Bean front page for Solana Breakpoint 2026. A Superteam UK campaign.',
   },
-  twitter: { card: 'summary_large_image', images: ['/assets/royal-exchange.jpg'] },
+  twitter: { card: 'summary' },
 };
 
 export const viewport: Viewport = { width: 'device-width', initialScale: 1 };

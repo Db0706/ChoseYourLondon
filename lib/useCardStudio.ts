@@ -90,7 +90,7 @@ export function useCardStudio() {
   const post = () => {
     const who = name.trim() || (handle ? '@' + handle : 'This legend');
     const url = SITE_URL || location.href.split('#')[0];
-    const text = `🗞️ ${headline} ${who} confirmed for Breakpoint.\n\nI'm going. See you at Solana Breakpoint, Olympia London, 15–17 Nov.\n\n#IMGOINGTOBREAKPOINT\n(make yours: ${url})`;
+    const text = `EXTRA EXTRA READ ALL ABOUT IT 🗞️\n\n${headline} ${who} confirmed for Breakpoint.\n\nIf you don't have your ticket yet, get yours and make your newspaper at ${url}`;
     window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(text), '_blank', 'noopener');
   };
 
