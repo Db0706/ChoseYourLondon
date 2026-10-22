@@ -140,3 +140,11 @@
 .saveImg { display: block; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .9); -webkit-touch-callout: default; user-select: auto; }
 .saveHint { margin: 0; text-align: center; font-size: 19px; line-height: 1.5; color: #D6D1C8; }
 .saveHint strong { color: #F3EFE7; font-weight: 400; font-style: italic; }
+
+/* Daily Bean headline picker */
+.headRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { padding: 10px 16px; border-radius: 999px; border: 1px solid rgba(243, 239, 231, .3); background: transparent; color: #F3EFE7; font: 400 17px var(--serif), serif; cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
+.chip:hover { border-color: #F3EFE7; }
+.chip[data-on="true"] { background: #F2140F; border-color: #F2140F; color: #fff; }
+@media (max-width: 600px) { .chips { gap: 8px; } .chip { padding: 8px 13px; font-size: 15px; } }

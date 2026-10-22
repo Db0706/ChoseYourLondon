@@ -2,8 +2,9 @@
 
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from 'react';
-import { LANDMARKS, type EpisodeInfo, countdown, episodeInfo, fmtDate, pad } from '@/lib/cyl-card';
+import { type EpisodeInfo, countdown, episodeInfo, fmtDate, pad } from '@/lib/cyl-card';
 import { LUMA_URL } from '@/lib/config';
+import { HEADLINES } from '@/lib/dailyBean';
 import { useCardStudio } from '@/lib/useCardStudio';
 import BeanBoard from './BeanBoard';
 import BeanRain from './BeanRain';
@@ -12,16 +13,6 @@ import s from './Night.module.css';
 export default function Night() {
   const st = useCardStudio();
   const [drawer, setDrawer] = useState(false);
-  // Name flicker while shuffling, like a departure board.
-  const [rolling, setRolling] = useState<string | null>(null);
-  const shuffle = () => {
-    if (rolling) return;
-    let n = 0;
-    const t = setInterval(() => {
-      if (++n > 8) { clearInterval(t); setRolling(null); st.shuffleLandmark(); return; }
-      setRolling(LANDMARKS[Math.floor(Math.random() * LANDMARKS.length)].name);
-    }, 70);
-  };
   const openDrawer = () => setDrawer(true);
   const closeDrawer = () => setDrawer(false);
 
@@ -74,9 +65,9 @@ export default function Night() {
       </section>
 
       <section id="intro" className={s.intro}>
-        <h1 className={s.h1}>Everyone’s coming to London. <em>Find your corner of it.</em></h1>
+        <h1 className={s.h1}>Everyone’s coming to London. <em>Make the front page.</em></h1>
         <div className={s.introSide}>
-          <p className={s.introText}>Add your details and we’ll match you with a London stop. Download your card, post it, and tag the friend who still hasn’t booked.</p>
+          <p className={s.introText}>Add your details, pick your headline, and The Daily Bean prints your front page. Download it, post it, and tag the friend who still hasn’t booked.</p>
         </div>
       </section>
 
@@ -109,17 +100,17 @@ export default function Night() {
             </div>
 
             <div className={s.stepTight}>
-              <div className={s.stopRow}>
-                {st.landmark && !rolling
-                  ? <span className={s.stopThumb} style={{ backgroundImage: `url(${st.landmark.thumb})` }} />
-                  : <span className={`${s.stopThumb} ${s.stopMystery}`}>?</span>}
-                <span className={s.stopText}>
-                  <span className={s.stopKicker}>{st.landmark ? 'You chose' : 'Mystery stop'}</span>
-                  <span className={s.stopName}>{rolling ?? st.landmark?.name ?? '???'}</span>
-                  <span className={s.stopArea}>{rolling ? '· · ·' : st.landmark?.area ?? 'Choose Innit to choose yours'}</span>
-                </span>
-                <button type="button" onClick={shuffle} disabled={!!rolling} className={st.landmark ? s.ghostBtn : s.chooseBtn}>{st.landmark ? 'Shuffle Innit ↻' : 'Choose Innit'}</button>
+              <div className={s.headRow}>
+                <span className={s.fieldLabel}>Your headline</span>
+                <button type="button" onClick={st.shuffleHeadline} className={s.ghostBtn}>Shuffle Innit ↻</button>
               </div>
+              <div className={s.chips} role="radiogroup" aria-label="Your headline">
+                {HEADLINES.map(h => (
+                  <button key={h} type="button" role="radio" aria-checked={st.headline === h}
+                    onClick={() => st.pickHeadline(h)} className={s.chip} data-on={st.headline === h}>{h}</button>
+                ))}
+              </div>
+              <span className={s.muted}>“{st.headline} confirmed for Breakpoint”</span>
             </div>
 
           </div>
@@ -127,16 +118,14 @@ export default function Night() {
           <div className={s.preview}>
             <div>
               <div className={s.frame}>
-                <canvas ref={st.canvasRef} width={2400} height={1350} className={s.canvas} />
+                <canvas ref={st.canvasRef} width={2752} height={1536} className={s.canvas} />
               </div>
             </div>
             <div className={s.btnRow}>
-              <button type="button" onClick={st.download} disabled={!st.landmark} className={s.primary}>Download card (PNG)</button>
-              <button type="button" onClick={st.post} disabled={!st.landmark} className={s.secondary}>Post on X, then attach it</button>
+              <button type="button" onClick={st.download} className={s.primary}>Download card (PNG)</button>
+              <button type="button" onClick={st.post} className={s.secondary}>Post on X, then attach it</button>
             </div>
-            <p className={s.note}>{st.landmark
-              ? 'Preview. The download is the full 2400 × 1350 image. Your photo never leaves your browser.'
-              : 'Hit Choose Innit to choose your stop, then download your card.'}</p>
+            <p className={s.note}>Preview. The download is the full-size front page. Your photo never leaves your browser.</p>
           </div>
         </div>
       </section>

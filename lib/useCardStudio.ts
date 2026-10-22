@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from 'react';
-import { CARD_COLOUR, LANDMARKS, MYSTERY, MYSTERY_COLOUR, randomLandmark, loadImage, renderCard } from './cyl-card';
+import { loadImage } from './cyl-card';
+import { HEADLINES, renderBeanCard } from './dailyBean';
 import { SITE_URL } from './config';
 import { cardFonts } from './fonts';
 
@@ -15,8 +16,7 @@ export function useCardStudio() {
   const [name, setName] = useState('');
   const [company, setCompany] = useState('');
   const [avatar, setAvatar] = useState<string | null>(null);
-  // null = still a mystery; set when they press "Choose Innit".
-  const [landmarkId, setLandmarkId] = useState<string | null>(null);
+  const [headline, setHeadline] = useState(HEADLINES[0]);
   const [status, setStatus] = useState('');
   // null until mounted so server and client render the same markup.
   const [now, setNow] = useState<number | null>(null);
@@ -32,18 +32,17 @@ export function useCardStudio() {
     return () => clearInterval(t);
   }, []);
 
-  const landmark = LANDMARKS.find(l => l.id === landmarkId) || null;
   const cardName = name.trim() || handle || 'Your name';
 
   useEffect(() => {
     const c = canvasRef.current; if (!c) return;
     const t = ++tok.current;
     blob.current = null;
-    renderCard(c, { landmark: landmark || MYSTERY, colour: landmark ? CARD_COLOUR : MYSTERY_COLOUR, name: cardName, handle, company, avatar: avatar || DEFAULT_PFP, fonts: cardFonts, isCurrent: () => t === tok.current })
+    renderBeanCard(c, { headline, name: cardName, company, handle, avatar: avatar || DEFAULT_PFP, fonts: cardFonts, isCurrent: () => t === tok.current })
       // Keep a ready-made PNG so a tap on Download can open the share sheet straight away
       // (phones only allow that while the tap is still "fresh").
-      .then(drawn => { if (drawn && landmark) c.toBlob(b => { if (t === tok.current) blob.current = b; }, 'image/png'); });
-  }, [landmark, cardName, handle, company, avatar]);
+      .then(drawn => { if (drawn) c.toBlob(b => { if (t === tok.current) blob.current = b; }, 'image/png'); });
+  }, [headline, cardName, handle, company, avatar]);
 
   const pull = useCallback(async () => {
     const h = handle;
@@ -69,8 +68,8 @@ export function useCardStudio() {
   // ignore that and open the image as a new page, so there we use the share sheet ("Save Image"),
   // or show the image on this page to press-and-hold, instead of sending people away.
   const download = async () => {
-    const c = canvasRef.current; if (!landmark || !c) return;
-    const filename = `choose-your-london-${landmark.id}.png`;
+    const c = canvasRef.current; if (!c) return;
+    const filename = `daily-bean-${headline.toLowerCase().replace(/[^a-z]+/g, '-')}.png`;
     const png = blob.current || await new Promise<Blob | null>(res => c.toBlob(res, 'image/png'));
     if (!png) return;
     const touch = window.matchMedia('(pointer: coarse)').matches;
@@ -89,21 +88,21 @@ export function useCardStudio() {
   };
   const closeSave = () => { if (saveUrl) URL.revokeObjectURL(saveUrl); setSaveUrl(null); };
   const post = () => {
-    if (!landmark) return;
-    const who = name.trim() || (handle ? '@' + handle : 'We');
+    const who = name.trim() || (handle ? '@' + handle : 'This legend');
     const url = SITE_URL || location.href.split('#')[0];
-    const text = `${who} chose ${landmark.name}.\n\nChoose your London. See you at Solana Breakpoint, 15–17 Nov.\n\n(make yours: ${url})`;
+    const text = `🗞️ ${headline} ${who} confirmed for Breakpoint.\n\nI'm going. See you at Solana Breakpoint, Olympia London, 15–17 Nov.\n\n#IMGOINGTOBREAKPOINT\n(make yours: ${url})`;
     window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(text), '_blank', 'noopener');
   };
 
   return {
-    handle, name, status, now, landmark, landmarkId, canvasRef,
+    handle, name, status, now, headline, canvasRef,
     onHandle: (e: ChangeEvent<HTMLInputElement>) => setHandle(cleanHandle(e.target.value)),
     onHandleKey: (e: KeyboardEvent<HTMLInputElement>) => { if (e.key === 'Enter') pull(); },
     onName: (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value.slice(0, 40)),
     company, onCompany: (e: ChangeEvent<HTMLInputElement>) => setCompany(e.target.value.slice(0, 50)),
     pull, onAvatarFile,
-    shuffleLandmark: () => setLandmarkId(p => randomLandmark(p).id),
+    pickHeadline: setHeadline,
+    shuffleHeadline: () => setHeadline(p => { const o = HEADLINES.filter(h => h !== p); return o[Math.floor(Math.random() * o.length)]; }),
     download, post, saveUrl, closeSave,
   };
 }
