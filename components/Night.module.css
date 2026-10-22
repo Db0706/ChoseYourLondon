@@ -11,14 +11,11 @@
 .episodesBtn { display: flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 999px; border: 1px solid rgba(243, 239, 231, .3); background: rgba(10, 10, 12, .35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #F3EFE7; font: 400 18px var(--serif), serif; cursor: pointer; text-transform: uppercase; letter-spacing: .04em; }
 .episodesBtn:hover { border-color: #F3EFE7; }
 .liveDot { width: 7px; height: 7px; border-radius: 50%; background: #F2140F; box-shadow: 0 0 10px #F2140F; }
-.navCta { padding: 12px 20px; border-radius: 999px; background: #F2140F; color: #fff; font: 400 18px var(--serif), serif; text-transform: uppercase; letter-spacing: .04em; }
-.navCta:hover { background: #F3EFE7; color: #0A0A0C; }
 @media (max-width: 480px) {
   .header { gap: 10px; }
   .kicker { display: none; }
   .logoSmall { width: 92px; }
   .episodesBtn { padding: 10px 12px; font-size: 15px; letter-spacing: .02em; }
-  .navCta { padding: 11px 13px; font-size: 15px; letter-spacing: .02em; }
 }
 
 /* Hero */

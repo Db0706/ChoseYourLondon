@@ -47,7 +47,6 @@ export default function Night() {
         <div className={s.kicker}>Solana Breakpoint · Olympia London · 15–17 Nov 2026</div>
         <nav className={s.nav}>
           <button type="button" onClick={openDrawer} className={s.episodesBtn}>Episodes<span className={s.liveDot} /></button>
-          <a href="#studio" className={s.navCta}>Choose yours</a>
         </nav>
       </header>
 
