@@ -4,9 +4,9 @@
 import { useEffect, useState } from 'react';
 import { type EpisodeInfo, countdown, episodeInfo, fmtDate, pad } from '@/lib/cyl-card';
 import { LUMA_URL } from '@/lib/config';
-import { HEADLINES } from '@/lib/dailyBean';
 import { useCardStudio } from '@/lib/useCardStudio';
 import BeanBoard from './BeanBoard';
+import HeadlinePicker from './HeadlinePicker';
 import BeanRain from './BeanRain';
 import s from './Night.module.css';
 
@@ -99,17 +99,13 @@ export default function Night() {
             </div>
 
             <div className={s.stepTight}>
-              <label className={s.nameField}>
-                <span className={s.fieldLabel}>Your headline</span>
+              <div className={s.nameField}>
                 <div className={s.headRow}>
-                  <div className={s.selectBox}>
-                    <select value={st.headline} onChange={e => st.pickHeadline(e.target.value)} className={s.select}>
-                      {HEADLINES.map(h => <option key={h} value={h}>{h}</option>)}
-                    </select>
-                  </div>
+                  <span className={s.fieldLabel}>Your headline</span>
                   <button type="button" onClick={st.shuffleHeadline} className={s.ghostBtn}>Shuffle Innit ↻</button>
                 </div>
-              </label>
+                <HeadlinePicker value={st.headline} onChange={st.pickHeadline} />
+              </div>
               <span className={s.muted}>“{st.headline} confirmed for Breakpoint”</span>
             </div>
 
