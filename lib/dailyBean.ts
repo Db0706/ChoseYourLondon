@@ -9,8 +9,8 @@ const INK_WEAR = '/cards/ink-wear.png';                 // worn-ink speckle for 
 
 // Areas on the 2752×1536 template.
 const PHOTO = { x: 1917, y: 433, w: 732, h: 867 };
-const QUOTE = { x: 105, y: 1158, w: 1285, h: 126 };
-const CAPTION = { x: 1910, y: 1326, w: 740 };
+const QUOTE = { x: 105, y: 1150, w: 1290, h: 146 };
+const CAPTION = { x: 1910, y: 1318, w: 740 };
 const HEADLINE = { x: 105, baseline: 637, maxW: 1540, capH: 188 }; // maxW stops short of the starburst (x≈1690)
 const INK = '#181513';
 
@@ -113,18 +113,19 @@ export async function renderBeanCard(c: HTMLCanvasElement, o: BeanCard) {
   // 3 · quote under BREAKPOINT
   const name = o.name.trim() || 'Your name', company = o.company.trim();
   const quote = `“I’m going,” says ${name}${company ? ` of ${company}` : ''}, as London braces itself for Nov 15–17`;
-  const q = fitText(ctx, quote, s => `italic ${s}px ${news}`, QUOTE.w - 16, QUOTE.h, 2, 72);
-  ctx.font = `italic ${q.size}px ${news}`; ctx.fillStyle = INK; ctx.textBaseline = 'top';
+  const q = fitText(ctx, quote, s => `italic ${s}px ${news}`, QUOTE.w - 24, QUOTE.h, 2, 92);
+  ctx.font = `italic ${q.size}px ${news}`; ctx.fillStyle = ctx.strokeStyle = INK; ctx.textBaseline = 'top';
+  ctx.lineWidth = q.size * 0.055; ctx.lineJoin = 'round'; // heavier than the font's regular weight so it reads small
   let y = QUOTE.y + (QUOTE.h - q.size * 1.18 * q.lines.length) / 2;
-  for (const line of q.lines) { ctx.fillText(line, QUOTE.x + 8, y); y += q.size * 1.18; }
+  for (const line of q.lines) { ctx.fillText(line, QUOTE.x + 8, y); ctx.strokeText(line, QUOTE.x + 8, y); y += q.size * 1.18; }
 
   // 4 · photo caption and credit
-  const cap = `${name}${company ? ` (${company})` : ''}, pictured yesterday`;
-  const cf = fitText(ctx, cap, s => `italic ${s}px ${news}`, CAPTION.w - 26, 60, 1, 44);
-  ctx.font = `italic ${cf.size}px ${news}`; ctx.fillText(cap, CAPTION.x + 6, CAPTION.y + 8);
-  if (o.handle) {
-    ctx.font = `30px ${news}`; ctx.fillStyle = '#5f5a54';
-    ctx.fillText(`PHOTO: @${o.handle.toUpperCase()}`, CAPTION.x + 6, CAPTION.y + 70);
-  }
+  const cap = `${name}${company ? ` (${company})` : ''}`;
+  const cf = fitText(ctx, cap, s => `${s}px ${slab}`, CAPTION.w - 16, 70, 1, 56);
+  ctx.font = `${cf.size}px ${slab}`; ctx.fillText(cap, CAPTION.x + 6, CAPTION.y + 6);
+  const credit = `Pictured yesterday${o.handle ? ` · photo: @${o.handle}` : ''}`;
+  const kf = fitText(ctx, credit, s => `italic ${s}px ${news}`, CAPTION.w - 16, 46, 1, 36);
+  ctx.font = `italic ${kf.size}px ${news}`; ctx.lineWidth = kf.size * 0.04;
+  ctx.fillText(credit, CAPTION.x + 6, CAPTION.y + 76); ctx.strokeText(credit, CAPTION.x + 6, CAPTION.y + 76);
   return true;
 }
