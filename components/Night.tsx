@@ -100,16 +100,17 @@ export default function Night() {
             </div>
 
             <div className={s.stepTight}>
-              <div className={s.headRow}>
+              <label className={s.nameField}>
                 <span className={s.fieldLabel}>Your headline</span>
-                <button type="button" onClick={st.shuffleHeadline} className={s.ghostBtn}>Shuffle Innit ↻</button>
-              </div>
-              <div className={s.chips} role="radiogroup" aria-label="Your headline">
-                {HEADLINES.map(h => (
-                  <button key={h} type="button" role="radio" aria-checked={st.headline === h}
-                    onClick={() => st.pickHeadline(h)} className={s.chip} data-on={st.headline === h}>{h}</button>
-                ))}
-              </div>
+                <div className={s.headRow}>
+                  <div className={s.selectBox}>
+                    <select value={st.headline} onChange={e => st.pickHeadline(e.target.value)} className={s.select}>
+                      {HEADLINES.map(h => <option key={h} value={h}>{h}</option>)}
+                    </select>
+                  </div>
+                  <button type="button" onClick={st.shuffleHeadline} className={s.ghostBtn}>Shuffle Innit ↻</button>
+                </div>
+              </label>
               <span className={s.muted}>“{st.headline} confirmed for Breakpoint”</span>
             </div>
 

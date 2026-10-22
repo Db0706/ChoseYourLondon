@@ -142,9 +142,9 @@
 .saveHint strong { color: #F3EFE7; font-weight: 400; font-style: italic; }
 
 /* Daily Bean headline picker */
-.headRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.chips { display: flex; flex-wrap: wrap; gap: 10px; }
-.chip { padding: 10px 16px; border-radius: 999px; border: 1px solid rgba(243, 239, 231, .3); background: transparent; color: #F3EFE7; font: 400 17px var(--serif), serif; cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
-.chip:hover { border-color: #F3EFE7; }
-.chip[data-on="true"] { background: #F2140F; border-color: #F2140F; color: #fff; }
-@media (max-width: 600px) { .chips { gap: 8px; } .chip { padding: 8px 13px; font-size: 15px; } }
+.headRow { display: flex; align-items: center; gap: 14px; }
+.selectBox { position: relative; flex: 1; min-width: 0; }
+.selectBox::after { content: ''; position: absolute; right: 6px; top: 50%; width: 10px; height: 10px; border-right: 2px solid #F3EFE7; border-bottom: 2px solid #F3EFE7; transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+.select { width: 100%; appearance: none; -webkit-appearance: none; background: transparent; border: 0; border-bottom: 1px solid rgba(243, 239, 231, .22); border-radius: 0; outline: none; color: #F3EFE7; font: 400 32px var(--serif), serif; padding: 6px 30px 6px 0; cursor: pointer; }
+.select:focus { border-bottom-color: #F3EFE7; }
+.select option { background: #0A0A0C; color: #F3EFE7; font-size: 18px; }
