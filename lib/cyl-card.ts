@@ -55,15 +55,16 @@ export const CARD_COLOUR = '#E3120B';
 //   otherwise the Choose Your London Luma page (LUMA_URL)
 // thumb → the episode's thumbnail (in /public/episodes). It's revealed once the episode is out;
 //         until then every thumbnail shows as a blurred placeholder.
-const EPISODE_INFO: { title: string; x?: string; premiere?: string; thumb?: string }[] = [
+// soon → held back: stays locked as "Coming soon" (no date or countdown) until this is removed.
+const EPISODE_INFO: { title: string; x?: string; premiere?: string; thumb?: string; soon?: boolean }[] = [
   { title: 'Doomer', thumb: '/episodes/ep01-doomer.jpg', x: 'https://x.com/SuperteamUK/status/2103137851642630246?s=20', premiere: 'https://luma.com/0j8gx7i1?tk=AAKyzV' },
   { title: 'You’ll Be Fine', thumb: '/episodes/ep02-youll-be-fine.jpg', x: 'https://x.com/SuperteamUK/status/2105674135795892702?s=20' },
   { title: 'The Intern', thumb: '/episodes/ep03-the-intern.jpg', x: 'https://x.com/SuperteamUK/status/2108221860135551231?s=20' },
   { title: 'Departed', thumb: '/episodes/ep04-departed-official.jpg', x: 'https://x.com/SuperteamUK/status/2110802640640827630' },
-  { title: 'Choose Your London' },
+  { title: 'Choose Your London', soon: true },
 ];
 export const EPISODES = EPISODE_INFO.map((e, i) => ({
-  n: i + 1, title: e.title, link: e.x || e.premiere || null, thumb: e.thumb || null,
+  n: i + 1, title: e.title, link: e.x || e.premiere || null, thumb: e.thumb || null, soon: !!e.soon,
   date: new Date(Date.UTC(2026, 8, 24 + 7 * i, 15, 0)),
 }));
 
@@ -77,8 +78,9 @@ export function countdown(ms: number, short?: boolean) {
 }
 export function episodeInfo(now: Date) {
   const t = now.getTime();
-  const next = EPISODES.find(e => e.date.getTime() > t) || null;
-  return { next, list: EPISODES.map(e => ({ ...e, out: e.date.getTime() <= t, isNext: !!next && next.n === e.n, dateLabel: fmtDate(e.date) })) };
+  const isOut = (e: typeof EPISODES[number]) => !e.soon && e.date.getTime() <= t;
+  const next = EPISODES.find(e => !isOut(e)) || null;
+  return { next, list: EPISODES.map(e => ({ ...e, out: isOut(e), isNext: !!next && next.n === e.n, dateLabel: e.soon ? 'Date TBC' : fmtDate(e.date) })) };
 }
 
 const imgCache = new Map<string, Promise<HTMLImageElement>>();

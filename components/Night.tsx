@@ -31,10 +31,10 @@ export default function Night() {
   const anyOut = info.list.some(e => e.out);
 
   const tabLabel = !now ? '' : next && next.n === 1 ? 'Premieres ' + fmtDate(next.date) : 'EP ' + pad(next ? next.n - 1 : 5) + ' out now';
-  const heroChipTitle = !now ? '' : !next ? 'All five episodes out now' : next.n === 1 ? 'EP 01 premieres ' + fmtDate(next.date) : 'EP ' + pad(next.n) + ' drops ' + fmtDate(next.date);
-  const count = !now ? '' : next ? countdown(next.date.getTime() - now.getTime()) : (anyOut ? 'Binge away' : '');
+  const heroChipTitle = !now ? '' : !next ? 'All five episodes out now' : next.n === 1 ? 'EP 01 premieres ' + fmtDate(next.date) : next.soon ? 'EP ' + pad(next.n) + ' · ' + next.title : 'EP ' + pad(next.n) + ' drops ' + fmtDate(next.date);
+  const count = !now ? '' : next ? (next.soon ? 'Coming soon' : countdown(next.date.getTime() - now.getTime())) : (anyOut ? 'Binge away' : '');
   const nextLabel = next ? 'EP ' + pad(next.n) : 'All out';
-  const nextDate = next ? fmtDate(next.date) : '';
+  const nextDate = next ? (next.soon ? next.title : fmtDate(next.date)) : '';
 
   return (
     <div id="top" className={s.root} data-theme="night">
@@ -173,7 +173,7 @@ export default function Night() {
                   <span className={s.chip} style={{
                     background: e.out ? '#F2140F' : e.isNext ? '#F3EFE7' : 'rgba(243,239,231,.08)',
                     color: e.out ? '#fff' : e.isNext ? '#0A0A0C' : '#9C978F',
-                  }}>{e.out ? 'Out now' : e.isNext ? 'Up next · notify me' : 'Locked'}</span>
+                  }}>{e.out ? 'Out now' : e.soon ? 'Coming soon' : e.isNext ? 'Up next · notify me' : 'Locked'}</span>
                 </span>
               </a>
             ))}
